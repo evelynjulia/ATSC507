@@ -59,7 +59,7 @@ On the same plot, plot the altitude of Zground.
 # 2-D Domain:  xkm = 0 to 1000 km ,   zkm = 0 to 30 km
 # for your calculations, use dx = 20 km
 dx = 20
-x = np.arange(0,2000,dx)
+x = np.arange(0,1000,dx)
 
 
 # dx = 20
@@ -90,9 +90,9 @@ for i in range (0,10):
 
 ################################################# attempt 2
 dx = 20
-x = np.arange(0,2000,dx)
+x = np.arange(0,1000,dx)
 
-dz = 0.001
+dz = 1
 z = np.arange(0,30,dz)
 
 Pmsl = 95 + 0.01*x
@@ -104,8 +104,8 @@ T = np.empty((len(x),len(z)))
 for i in range(len(x)):
     for j in range(len(z)):
         if j <12:
-            print(T[i,j])
-            print(i,j)
+            #print(T[i,j])
+            #print(i,j)
             T[i,j] = (40 - 0.08*x[i])  -  6.5*z[j]
             print(T[i,j])
         else:
@@ -121,20 +121,27 @@ P2 = P1 * exp[ (z1-z2) / (a*Tkelvin) ]   where a = 0.0293 km/K.
 a = 0.0293 # km/K.
 
 
-list_of_pressure = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 2]
+# list_of_pressure = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 2]
 P = np.empty((len(x),len(z)))
 P[:,0] = Pmsl
 
 for i in range(len(x)):
     for j in range(len(z)-1):
-        P[:,j+1] = P[:,j] * [ np.exp(z[j] - z[(j+1)]) / (a*Tkelvin[:,j+1]) ]
+        P[i,j+1] = P[i,j] * ( np.exp(z[j] - z[(j+1)])) / (a*Tkelvin[i,j+1]) 
 
 
-z_at_P = np.empty((len(x),len(list_of_pressure)))
-for i in range(len(x)):
-    for j in range(len(list_of_pressure)-1):
-        z_at_P[j+1]= (a*Tkelvin* np.log(list_of_pressure[i]/list_of_pressure[i+1]) ) +z_at_P[j]
+# z_at_P = np.empty((len(x),len(list_of_pressure)))
+# for i in range(len(x)):
+#     for j in range(len(list_of_pressure)-1):
+#         z_at_P[j+1]= (a*Tkelvin* np.log(list_of_pressure[i]/list_of_pressure[i+1]) ) +z_at_P[j]
 
+levs = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90,100]
+
+plt.contour(P.T, levs)
+plt.show()
+
+
+# plot topography
 
 #%% Part 2
 '''
