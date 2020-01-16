@@ -34,7 +34,7 @@ should use this reference value in eq. (2.2), even though you use the actual Pms
 a basis for all your other calculations.
 
 Intersecting the background pressure field that you just determined is the topography,
-given in height above sera level by:
+given in height above sea level by:
 
 Zground_km = 1 km + (1km)*cos[ 2*(3.14159)*(xkm-500km) / 500km ]     for  250km < x < 750 km
 and Zground = 0 elsewhere.
@@ -50,45 +50,6 @@ Find:  On an x-z graph, plot the altitudes (km) of the following isobaric surfac
 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 2 kPa.
 On the same plot, plot the altitude of Zground.
 '''
-
-
-# Use the hydrostatic equation:
-# dP = rho * g * dz
-# dz = dP/(rho*g)
-
-# 2-D Domain:  xkm = 0 to 1000 km ,   zkm = 0 to 30 km
-# for your calculations, use dx = 20 km
-dx = 20
-x = np.arange(0,1000,dx)
-
-
-# dx = 20
-# x = np.arange(0,2000,dx)
-
-# zkm = 0 to 30 km
-# for your calculations, use dx = 20 km, and dz = 1 km or finer (I use dz=0.001 km).
-
-
-rho = 1.2754 # kg/m³ --> dry air density
-g = -9.81
-#dz = [] # need tp calculate this
-pressure = np.array([100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 2]) # kPa
-
-dp = np.diff(pressure)
-
-calc_dz = dp/(rho*g)
-
-
-# Zground_km = 1 km + (1km)*cos[ 2*(3.14159)*(xkm-500km) / 500km ]     for  250km < x < 750 km
-# and Zground = 0 elsewhere.
-
-z = np.array([0])
-
-for i in range (0,10):
-    z = np.append(z, z[i]+calc_dz[i+1])
-
-
-################################################# attempt 2
 dx = 20
 x = np.arange(0,1000,dx)
 
@@ -96,6 +57,19 @@ dz = 1
 z = np.arange(0,30,dz)
 
 Pmsl = 95 + 0.01*x
+
+# set topography
+'''
+Zground_km = 1 km + (1km)*cos[ 2*(3.14159)*(xkm-500km) / 500km ]     for  250km < x < 750 km
+and Zground = 0 elsewhere.
+'''
+zground = np.empty(len(x))
+for i in range(len(x)):
+    if x[i] >250 and x[i] < 750:
+        zground[i] = 1+ (1 * np.cos( 2*(3.14159)*(x[i]-500) / 500 ))
+    else:
+        zground[i] = 0
+
 
 
 T = np.empty((len(x),len(z)))
@@ -129,11 +103,27 @@ for j in range(len(z)-1):
 
 levs = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90,100]
 
-plt.contour(P.T, levs)
+
+fig, ax = plt.subplots(1,1, figsize=(15,9))
+P_plot = ax.contour(P.T, levs)
+plt.clabel(P_plot, fmt = '%1.0f')
+plt.fill(zground)
+plt.xlabel
 plt.show()
 
+fig, ax = plt.subplots(1,2, figsize=(15,9))
+ax[0].bar(keys, vals)
+ax[0].set_ylabel('Count')
+ax[0].set_xlabel('Stability class')
+ax[1].hist(snds_sm_dates.groupby('COMP_DATE').first()['MEAN_GRAD_BELOW_850'],50)
+ax[1].set_xlabel('Mean gradient between 1000mb and 850mb')
+#plt.title('Number of cases in each stability class')
+plt.savefig(fig_dir+'bar_stab_classes_and_grad'+run_date+'run_stablim'+str(stability_limit)+'.png')
 
-# plot topography
+
+
+
+
 
 #%% Part 2
 '''
