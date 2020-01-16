@@ -109,9 +109,10 @@ levs = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90,100]
 lev_labels = ['2 kPa', '5 kPa', '10 kPa', '20 kPa', '30 kPa', '40 kPa', '50 kPa', '60 kPa', '70 kPa', '80 kPa', '90 kPa','100 kPa']
 
 fig, ax = plt.subplots(1,1, figsize=(9,6))
-P_plot = ax.contour(P.T, levs)
+#P_plot = ax.contour(P.T, levs)
+P_plot = ax.contour(x,z,P.T, levs)
 ax.clabel(P_plot, fmt = '%1.0f kPa')
-ax.fill(zground)
+ax.fill(x,zground)
 ax.set_xlabel('x-domain (km)')
 ax.set_ylabel('Height (km)')
 plt.title('Part 1 - X-Z graph with altitudes of isobaric surfaces')
@@ -133,6 +134,42 @@ row1 = x, (km)
 row2 = Zground, (km)
 row3=Psfc (kPa)
 '''
+
+
+from scipy import interpolate
+
+new_p_at_zground_arr = []
+interp_levs = zground.copy()
+for i in range(len(x)):
+    interp_eq = interpolate.interp1d(z, P[i])
+    if interp_levs[i] > 0:
+        print('need to interpolate at', i)
+        new_p_at_zground = interp_eq(interp_levs[i])
+        print(new_p_at_zground)
+    else:
+        new_p_at_zground = Pmsl[i]
+    new_p_at_zground_arr = np.append(new_p_at_zground_arr, new_p_at_zground)
+
+
+print(new_p_at_zground_arr)
+
+
+
+# print in table:
+# ( create pd dataframe)
+
+import pandas as pd
+
+part_2_table = pd.DataFrame()
+
+part_2_table['x'] = x
+part_2_table['z_ground'] = zground
+part_2_table['p_sfc'] = new_p_at_zground_arr
+
+
+
+
+
 
 #%% Part 3
 '''
