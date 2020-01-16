@@ -98,18 +98,17 @@ z = np.arange(0,30,dz)
 Pmsl = 95 + 0.01*x
 
 
-
 T = np.empty((len(x),len(z)))
 
-for i in range(len(x)):
-    for j in range(len(z)):
-        if j <12:
-            #print(T[i,j])
-            #print(i,j)
-            T[i,j] = (40 - 0.08*x[i])  -  6.5*z[j]
-            print(T[i,j])
-        else:
-            T[i,j] = (40 - 0.08*x[i])  -  6.5*12
+for j in range(len(z)):
+    if z[j]<12:
+        #print(z[j], "is less than 12")
+        T[:,j] = (40 - 0.08*x)  -  6.5*z[j]
+    else: 
+        #print(z[j], "is more than 12")
+        T[:,j] = (40 - 0.08*x)  -  6.5*12
+
+
 
 Tkelvin = T + 273
 
