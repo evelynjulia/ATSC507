@@ -42,6 +42,10 @@ and Zground = 0 elsewhere.
 
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime as dt
+
+fig_dir = '/Users/ewicksteed/Documents/Eve/507/'
+run_date = dt.datetime.now().strftime('%y%m%d')
 
 
 #%% Part 1
@@ -102,23 +106,17 @@ for j in range(len(z)-1):
     P[:,j+1] = P[:,j] *  np.exp( (z[j] - z[(j+1)]) / (a*Tkelvin[:,j+1]) )
 
 levs = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90,100]
+lev_labels = ['2 kPa', '5 kPa', '10 kPa', '20 kPa', '30 kPa', '40 kPa', '50 kPa', '60 kPa', '70 kPa', '80 kPa', '90 kPa','100 kPa']
 
-
-fig, ax = plt.subplots(1,1, figsize=(15,9))
+fig, ax = plt.subplots(1,1, figsize=(9,6))
 P_plot = ax.contour(P.T, levs)
-plt.clabel(P_plot, fmt = '%1.0f')
-plt.fill(zground)
-plt.xlabel
-plt.show()
-
-fig, ax = plt.subplots(1,2, figsize=(15,9))
-ax[0].bar(keys, vals)
-ax[0].set_ylabel('Count')
-ax[0].set_xlabel('Stability class')
-ax[1].hist(snds_sm_dates.groupby('COMP_DATE').first()['MEAN_GRAD_BELOW_850'],50)
-ax[1].set_xlabel('Mean gradient between 1000mb and 850mb')
-#plt.title('Number of cases in each stability class')
-plt.savefig(fig_dir+'bar_stab_classes_and_grad'+run_date+'run_stablim'+str(stability_limit)+'.png')
+ax.clabel(P_plot, fmt = '%1.0f kPa')
+ax.fill(zground)
+ax.set_xlabel('x-domain (km)')
+ax.set_ylabel('Height (km)')
+plt.title('Part 1 - X-Z graph with altitudes of isobaric surfaces')
+#plt.show()
+plt.savefig(fig_dir+run_date+'part1_plot'+'.png')
 
 
 
