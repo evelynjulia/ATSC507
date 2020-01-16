@@ -44,7 +44,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
 
-fig_dir = '/Users/ewicksteed/Documents/Eve/507/'
+fig_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
+data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
+
 run_date = dt.datetime.now().strftime('%y%m%d')
 
 
@@ -167,9 +169,9 @@ part_2_table['z_ground'] = zground
 part_2_table['p_sfc'] = new_p_at_zground_arr
 
 
-part_2_table.T
+part_2_table
 
-part_2_table.to_csv(path_or_buf=None, sep=', ',
+part_2_table.to_csv(data_dir+'Part_2_table.csv', sep=',')
 
 
 
