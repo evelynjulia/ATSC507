@@ -167,7 +167,9 @@ part_2_table['z_ground'] = zground
 part_2_table['p_sfc'] = new_p_at_zground_arr
 
 
+part_2_table.T
 
+part_2_table.to_csv(path_or_buf=None, sep=', ',
 
 
 
