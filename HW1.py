@@ -41,6 +41,7 @@ and Zground = 0 elsewhere.
 '''
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 #%% Part 1
@@ -77,7 +78,6 @@ dp = np.diff(pressure)
 
 calc_dz = dp/(rho*g)
 
-calc_z = 
 
 # Zground_km = 1 km + (1km)*cos[ 2*(3.14159)*(xkm-500km) / 500km ]     for  250km < x < 750 km
 # and Zground = 0 elsewhere.
@@ -89,6 +89,51 @@ for i in range (0,10):
 
 
 ################################################# attempt 2
+dx = 20
+x = np.arange(0,2000,dx)
+
+dz = 0.001
+z = np.arange(0,30,dz)
+
+Pmsl = 95 + 0.01*x
+
+
+
+T = np.empty((len(x),len(z)))
+
+for i in range(len(x)):
+    for j in range(len(z)):
+        if j <12:
+            print(T[i,j])
+            print(i,j)
+            T[i,j] = (40 - 0.08*x[i])  -  6.5*z[j]
+            print(T[i,j])
+        else:
+            T[i,j] = (40 - 0.08*x[i])  -  6.5*12
+
+Tkelvin = T + 273
+
+'''
+Actual Mean Sea-Level (at z = 0) pressure is Pmsl = 95kPa + 0.01*xkm
+Use the info above to determine P vs z, by iterating up from sea-level using hypsometric eq.
+P2 = P1 * exp[ (z1-z2) / (a*Tkelvin) ]   where a = 0.0293 km/K.
+'''
+a = 0.0293 # km/K.
+
+
+list_of_pressure = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 2]
+P = np.empty((len(x),len(z)))
+P[:,0] = Pmsl
+
+for i in range(len(x)):
+    for j in range(len(z)-1):
+        P[:,j+1] = P[:,j] * [ np.exp(z[j] - z[(j+1)]) / (a*Tkelvin[:,j+1]) ]
+
+
+z_at_P = np.empty((len(x),len(list_of_pressure)))
+for i in range(len(x)):
+    for j in range(len(list_of_pressure)-1):
+        z_at_P[j+1]= (a*Tkelvin* np.log(list_of_pressure[i]/list_of_pressure[i+1]) ) +z_at_P[j]
 
 
 #%% Part 2
