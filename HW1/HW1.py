@@ -166,12 +166,17 @@ part_2_table = pd.DataFrame()
 
 part_2_table['x'] = x
 part_2_table['z_ground'] = zground
-part_2_table['p_sfc'] = new_p_at_zground_arr
+part_2_table['p_sfc_(interpolation)'] = new_p_at_zground_arr
 
+### could also do this by using hypsometric equation:
+new_test = P[:,0] *  np.exp( (z[0] - zground) / (a*Tkelvin[:,1]) )
+
+part_2_table['p_sfc_(hypsometric_eqn)'] = new_test
 
 part_2_table
 
 part_2_table.to_csv(data_dir+'Part_2_table.csv', sep=',')
+
 
 
 
