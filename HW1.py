@@ -124,15 +124,8 @@ a = 0.0293 # km/K.
 P = np.empty((len(x),len(z)))
 P[:,0] = Pmsl
 
-for i in range(len(x)):
-    for j in range(len(z)-1):
-        P[i,j+1] = P[i,j] * ( np.exp(z[j] - z[(j+1)])) / (a*Tkelvin[i,j+1]) 
-
-
-# z_at_P = np.empty((len(x),len(list_of_pressure)))
-# for i in range(len(x)):
-#     for j in range(len(list_of_pressure)-1):
-#         z_at_P[j+1]= (a*Tkelvin* np.log(list_of_pressure[i]/list_of_pressure[i+1]) ) +z_at_P[j]
+for j in range(len(z)-1):
+    P[:,j+1] = P[:,j] *  np.exp( (z[j] - z[(j+1)]) / (a*Tkelvin[:,j+1]) )
 
 levs = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90,100]
 
