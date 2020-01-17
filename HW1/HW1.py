@@ -233,7 +233,29 @@ B_eta[ind1] = 0
 
 
 # Hybrid sigma-pressure vertical coordinate
-pi = B_eta*(ps-pt) + (eta - B_eta)*(p0-pt)+pt   # eqn 2.2
+pd = np.empty((len(x), len(eta)))
+for i in range(len(x)):
+    pd[i] = B_eta*(ps[i]-pt) + (eta - B_eta)*(p0[i]-pt)+pt   # eqn 2.2
+
+
+
+## Plot
+
+fig, ax = plt.subplots(1,1, figsize=(9,6))
+#P_plot = ax.contour(P.T, levs)
+eta_plot = ax.plot(x,pd)
+ax.invert_yaxis()
+plt.show()
+
+# fig, ax = plt.subplots(1,1, figsize=(9,6))
+# P_plot = ax.contour(pd.T)
+# ax.clabel(eta_plot, fmt = '%1.0f kPa')
+# ax.fill(x,zground)
+# ax.set_xlabel('x-domain (km)')
+# ax.set_ylabel('Height (km)')
+# plt.title('Part 1 - X-Z graph with altitudes of isobaric surfaces')
+# #plt.show()
+# plt.savefig(fig_dir+run_date+'part1_plot'+'.png')
 
 
 
