@@ -209,7 +209,7 @@ eta =
 
 # Given:
 eta_c = 0.3 # above this value eta becomes a pure pressure coordinate
-eta = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1]
+eta = np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1])
 pt = 2 # kPa p top
 
 ps = # p surface
@@ -225,7 +225,16 @@ c3 = (2 * (1 + eta_c + (eta_c**2) ) ) / ((1-eta_c)**3)
 c4 = (- (1 + eta_c) ) / ((1-eta_c)**3)
 
 
-B_eta = c1 + c2*(eta) + c3*(eta**2) +c4*(eta**3)  # eqn 2.3
+B_eta = np.empty(len(eta)) # init empty array the right size
+
+# For eta > eta_c
+ind1 = np.where(eta > eta_c)
+B_eta[ind1] = c1 + c2*(eta[ind1]) + c3*(eta[ind1]**2) +c4*(eta[ind1]**3)  # eqn 2.3
+
+# For eta <= eta_c
+ind2 = np.where(eta <= eta_c)
+B_eta[ind2] = 0
+
 
 # Hybrid sigma-pressure vertical coordinate
 pi = B_eta*(ps-pt) + (eta - B_eta)*(p0-pt)+pt   # eqn 2.2
