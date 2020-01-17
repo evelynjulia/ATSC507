@@ -53,6 +53,7 @@ data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
 
 run_date = dt.datetime.now().strftime('%y%m%d')
 
+myfigsize = (15,9)
 
 #%% Part 1
 '''
@@ -114,14 +115,14 @@ for j in range(len(z)-1):
 levs = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90,100]
 lev_labels = ['2 kPa', '5 kPa', '10 kPa', '20 kPa', '30 kPa', '40 kPa', '50 kPa', '60 kPa', '70 kPa', '80 kPa', '90 kPa','100 kPa']
 
-fig, ax = plt.subplots(1,1, figsize=(9,6))
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
 #P_plot = ax.contour(P.T, levs)
 P_plot = ax.contour(x,z,P.T, levs)
 ax.clabel(P_plot, fmt = '%1.0f kPa')
 ax.fill(x,zground)
 ax.set_xlabel('x-domain (km)')
 ax.set_ylabel('Height (km)')
-plt.title('Part 1 - X-Z graph with altitudes of isobaric surfaces')
+plt.title('Part 1: X-Z graph with altitudes of isobaric surfaces')
 #plt.show()
 plt.savefig(fig_dir+run_date+'part1_plot'+'.png')
 
@@ -246,7 +247,7 @@ for i in range(len(x)):
 ## Plot
 labels = ['eta 0', 'eta 0.1', 'eta 0.2', 'eta 0.3', 'eta 0.4', 'eta 0.5', 'eta 0.6', 'eta 0.7', 'eta 0.8', 'eta 0.85', 'eta 0.9', 'eta 0.95', 'eta 1']
 
-fig, ax = plt.subplots(1,1, figsize=(9,6))
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
 #P_plot = ax.contour(P.T, levs)
 eta_plot = ax.plot(x,pd)
 #ax.fill(x,p_sfc_hyp)
@@ -259,6 +260,7 @@ ax2.fill(x,zground)
 ax2.set_ylim(0,30)
 plt.legend(eta_plot, labels)
 #fig.tight_layout()
+plt.title('Part 3: X-P graph with pressures of constant eta values')
 plt.savefig(fig_dir+run_date+'part3_plot'+'.png')
 #plt.show()
 
@@ -279,26 +281,23 @@ z at the pressure levels that correspond to the requested eta values.
 z_eta = np.empty((len(x),len(eta)))
 z_eta[:,0] = zground
 for lev in range(pd.shape[1]-1):
-    print(lev)
-    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev]
+    # z2 = (a*Tkelvin * ln( P1/P2)) + z1
+    # p1 = pd[:,lev+1] because of the order of the pd array (has 2kpa first)
+    # p2 = pd[:,lev]
+    # because pd[0] = array([ 2.  , 11.3 , 20.6 , 29.9 , 39.2 , 48.5 , 57.8 , 67.1 , 76.4 , 81.05, 85.7 , 90.35, 95.  ])
+    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev] 
 
 
-# z2 = (a*Tkelvin * ln( P1/P2)) + z1
+labels2 = ['eta 1','eta 0.95','eta 0.9','eta 0.85','eta 0.8','eta 0.7','eta 0.6','eta 0.5','eta 0.4','eta 0.3','eta 0.2','eta 0.1','eta 0']
 
-plt.plot(x,z_eta)
-plt.show()
-z2 = ( a*Tkelvin[:,0] ) * ( np.log(pd[:,0]/pd[:,1]) ) + zground
-
-
-# fig, ax = plt.subplots(1,1, figsize=(9,6))
-# P_plot = ax.contour(pd.T)
-# ax.clabel(eta_plot, fmt = '%1.0f kPa')
-# ax.fill(x,zground)
-# ax.set_xlabel('x-domain (km)')
-# ax.set_ylabel('Height (km)')
-# plt.title('Part 1 - X-Z graph with altitudes of isobaric surfaces')
-# #plt.show()
-# plt.savefig(fig_dir+run_date+'part1_plot'+'.png')
-
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
+eta_plot2 = ax.plot(x,z_eta)
+ax.fill(x,zground)
+ax.set_xlabel('x-domain (km)')
+ax.set_ylabel('Height (km)')
+plt.legend(eta_plot2, labels2)
+plt.title('Part 4: X-Z graph with altitudes of constant eta values')
+#plt.show()
+plt.savefig(fig_dir+run_date+'part4_plot'+'.png')
 
 
