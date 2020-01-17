@@ -40,7 +40,7 @@ Zground_km = 1 km + (1km)*cos[ 2*(3.14159)*(xkm-500km) / 500km ]     for  250km 
 and Zground = 0 elsewhere.
 '''
 
-#%%
+#%% Set some constants and directories
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -54,6 +54,7 @@ data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
 run_date = dt.datetime.now().strftime('%y%m%d')
 
 myfigsize = (15,9)
+
 
 #%% Part 1
 '''
@@ -82,7 +83,6 @@ for i in range(len(x)):
         zground[i] = 0
 
 
-
 T = np.empty((len(x),len(z)))
 
 for j in range(len(z)):
@@ -92,7 +92,6 @@ for j in range(len(z)):
     else: 
         #print(z[j], "is more than 12")
         T[:,j] = (40 - 0.08*x)  -  6.5*12
-
 
 
 Tkelvin = T + 273
@@ -128,9 +127,6 @@ plt.savefig(fig_dir+run_date+'part1_plot'+'.png')
 
 
 
-
-
-
 #%% Part 2
 '''
 Interpolate to find the Psurface (kPa) pressure at Zground. Namely, it is the pressure
@@ -141,9 +137,6 @@ row1 = x, (km)
 row2 = Zground, (km)
 row3=Psfc (kPa)
 '''
-
-
-
 
 p_sfc = []
 interp_levs = zground.copy()
@@ -157,31 +150,19 @@ for i in range(len(x)):
         p_sfc_i = Pmsl[i]
     p_sfc = np.append(p_sfc, p_sfc_i)
 
-
-print(p_sfc)
-
-
-
-# print in table:
-# ( create pd dataframe)
-
-
-
-part_2_table = pd.DataFrame()
-
-part_2_table['x'] = x
-part_2_table['z_ground'] = zground
-part_2_table['p_sfc_(interpolation)'] = p_sfc
-
 ### could also do this by using hypsometric equation:
 p_sfc_hyp = P[:,0] *  np.exp( (z[0] - zground) / (a*Tkelvin[:,1]) )
 
+# print in table:
+# (create pd dataframe)
+part_2_table = pd.DataFrame()
+part_2_table['x'] = x
+part_2_table['z_ground'] = zground
+part_2_table['p_sfc_(interpolation)'] = p_sfc
 part_2_table['p_sfc_(hypsometric_eqn)'] = p_sfc_hyp
 
-part_2_table
-
+# save to csv
 part_2_table.to_csv(data_dir+run_date+'Part_2_table.csv', sep=',')
-
 
 
 
@@ -220,7 +201,6 @@ pt = 2 # kPa p top
 ps = p_sfc_hyp # p surface
 p0 = Pmsl # reference sea-level pressure
 
-
 # Equations:
 
 # eqns 2.5
@@ -229,20 +209,16 @@ c2 = ( (- eta_c) * (4 + eta_c + eta_c**2) ) / ((1-eta_c)**3)
 c3 = (2 * (1 + eta_c + (eta_c**2) ) ) / ((1-eta_c)**3)
 c4 = (- (1 + eta_c) ) / ((1-eta_c)**3)
 
-
 # For all eta
 B_eta = c1 + c2*(eta) + c3*(eta**2) +c4*(eta**3)  # eqn 2.3
 # replace with B=0 for eta <= eta_c
 ind1 = np.where(eta <= eta_c)
 B_eta[ind1] = 0
 
-
 # Hybrid sigma-pressure vertical coordinate
 pd = np.empty((len(x), len(eta)))
 for i in range(len(x)):
     pd[i] = B_eta*(ps[i]-pt) + (eta - B_eta)*(p0[i]-pt)+pt   # eqn 2.2
-
-
 
 ## Plot
 labels = ['eta 0', 'eta 0.1', 'eta 0.2', 'eta 0.3', 'eta 0.4', 'eta 0.5', 'eta 0.6', 'eta 0.7', 'eta 0.8', 'eta 0.85', 'eta 0.9', 'eta 0.95', 'eta 1']
@@ -266,9 +242,6 @@ plt.savefig(fig_dir+run_date+'part3_plot'+'.png')
 
 
 
-
-
-
 #%% Part 4
 '''
 Create a new z-x graph, on which you plot the z altitudes of the constant eta lines for
@@ -286,7 +259,6 @@ for lev in range(pd.shape[1]-1):
     # p2 = pd[:,lev]
     # because pd[0] = array([ 2.  , 11.3 , 20.6 , 29.9 , 39.2 , 48.5 , 57.8 , 67.1 , 76.4 , 81.05, 85.7 , 90.35, 95.  ])
     z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev] 
-
 
 labels2 = ['eta 1','eta 0.95','eta 0.9','eta 0.85','eta 0.8','eta 0.7','eta 0.6','eta 0.5','eta 0.4','eta 0.3','eta 0.2','eta 0.1','eta 0']
 
