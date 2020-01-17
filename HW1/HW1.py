@@ -259,7 +259,8 @@ ax2.fill(x,zground)
 ax2.set_ylim(0,30)
 plt.legend(eta_plot, labels)
 #fig.tight_layout()
-plt.show()
+plt.savefig(fig_dir+run_date+'part3_plot'+'.png')
+#plt.show()
 
 
 
@@ -273,24 +274,20 @@ the same eta values as in part (3) above. Make use of the hypsometric eq to find
 z at the pressure levels that correspond to the requested eta values.
 '''
 
-# z_at_P = np.empty((len(x),len(list_of_pressure)))
-# for i in range(len(x)):
-#     for j in range(len(list_of_pressure)-1):
-#         z_at_P[j+1]= (a*Tkelvin* np.log(list_of_pressure[i]/list_of_pressure[i+1]) ) +z_at_P[j]
-
+# so now we have Pd which is the pressure levels and we need to find z from pd:
 
 z_eta = np.empty((len(x),len(eta)))
 z_eta[:,0] = zground
 for lev in range(pd.shape[1]-1):
     print(lev)
-    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev]/pd[:,lev+1]) ) +z_eta[:,lev]
+    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev]
 
 
 # z2 = (a*Tkelvin * ln( P1/P2)) + z1
 
-# so now we have Pd which is the pressure levels and we need to find z from pd:
-
-z2 = a*Tkelvin[:,0]* np.log(pd[:,0]/pd[:,1]) + zground
+plt.plot(x,z_eta)
+plt.show()
+z2 = ( a*Tkelvin[:,0] ) * ( np.log(pd[:,0]/pd[:,1]) ) + zground
 
 
 # fig, ax = plt.subplots(1,1, figsize=(9,6))
