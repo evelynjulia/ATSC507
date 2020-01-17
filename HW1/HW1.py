@@ -40,9 +40,13 @@ Zground_km = 1 km + (1km)*cos[ 2*(3.14159)*(xkm-500km) / 500km ]     for  250km 
 and Zground = 0 elsewhere.
 '''
 
+#%%
+
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
+from scipy import interpolate
+import pandas as pd
 
 fig_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
 data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
@@ -57,10 +61,10 @@ Find:  On an x-z graph, plot the altitudes (km) of the following isobaric surfac
 On the same plot, plot the altitude of Zground.
 '''
 dx = 20
-x = np.arange(0,1000,dx)
+x = np.arange(0,1020,dx)
 
 dz = 1
-z = np.arange(0,30,dz)
+z = np.arange(0,31,dz)
 
 Pmsl = 95 + 0.01*x
 
@@ -138,7 +142,7 @@ row3=Psfc (kPa)
 '''
 
 
-from scipy import interpolate
+
 
 p_sfc = []
 interp_levs = zground.copy()
@@ -160,7 +164,7 @@ print(p_sfc)
 # print in table:
 # ( create pd dataframe)
 
-import pandas as pd
+
 
 part_2_table = pd.DataFrame()
 
@@ -175,7 +179,7 @@ part_2_table['p_sfc_(hypsometric_eqn)'] = p_sfc_hyp
 
 part_2_table
 
-part_2_table.to_csv(data_dir+'Part_2_table.csv', sep=',')
+part_2_table.to_csv(data_dir+run_date+'Part_2_table.csv', sep=',')
 
 
 
@@ -240,12 +244,54 @@ for i in range(len(x)):
 
 
 ## Plot
+labels = ['eta 0', 'eta 0.1', 'eta 0.2', 'eta 0.3', 'eta 0.4', 'eta 0.5', 'eta 0.6', 'eta 0.7', 'eta 0.8', 'eta 0.85', 'eta 0.9', 'eta 0.95', 'eta 1']
 
 fig, ax = plt.subplots(1,1, figsize=(9,6))
 #P_plot = ax.contour(P.T, levs)
 eta_plot = ax.plot(x,pd)
+#ax.fill(x,p_sfc_hyp)
 ax.invert_yaxis()
+ax.set_xlabel('x-domain (km)')
+ax.set_ylabel('Pressure (kPa)')
+ax2 = ax.twinx()
+ax2.set_ylabel('Height (km)')
+ax2.fill(x,zground)
+ax2.set_ylim(0,30)
+plt.legend(eta_plot, labels)
+#fig.tight_layout()
 plt.show()
+
+
+
+
+
+
+#%% Part 4
+'''
+Create a new z-x graph, on which you plot the z altitudes of the constant eta lines for
+the same eta values as in part (3) above. Make use of the hypsometric eq to find the heights
+z at the pressure levels that correspond to the requested eta values.
+'''
+
+# z_at_P = np.empty((len(x),len(list_of_pressure)))
+# for i in range(len(x)):
+#     for j in range(len(list_of_pressure)-1):
+#         z_at_P[j+1]= (a*Tkelvin* np.log(list_of_pressure[i]/list_of_pressure[i+1]) ) +z_at_P[j]
+
+
+z_eta = np.empty((len(x),len(eta)))
+z_eta[:,0] = zground
+for lev in range(pd.shape[1]-1):
+    print(lev)
+    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev]/pd[:,lev+1]) ) +z_eta[:,lev]
+
+
+# z2 = (a*Tkelvin * ln( P1/P2)) + z1
+
+# so now we have Pd which is the pressure levels and we need to find z from pd:
+
+z2 = a*Tkelvin[:,0]* np.log(pd[:,0]/pd[:,1]) + zground
+
 
 # fig, ax = plt.subplots(1,1, figsize=(9,6))
 # P_plot = ax.contour(pd.T)
@@ -259,14 +305,3 @@ plt.show()
 
 
 
-
-
-
-
-
-#%% Part 4
-'''
-Create a new z-x graph, on which you plot the z altitudes of the constant eta lines for
-the same eta values as in part (3) above. Make use of the hypsometric eq to find the heights
-z at the pressure levels that correspond to the requested eta values.
-'''
