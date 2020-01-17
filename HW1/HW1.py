@@ -165,6 +165,13 @@ part_2_table['p_sfc_(hypsometric_eqn)'] = p_sfc_hyp
 part_2_table.to_csv(data_dir+run_date+'Part_2_table.csv', sep=',')
 
 
+part_2_table2 = pd.DataFrame()
+part_2_table2['x'] = x
+part_2_table2['z_ground'] = zground
+part_2_table2['p_sfc_(hypsometric_eqn)'] = p_sfc_hyp
+part_2_table2.to_csv(data_dir+run_date+'Part_2_table2.csv', sep=',')
+
+
 
 #%% Part 3
 '''
@@ -221,7 +228,7 @@ for i in range(len(x)):
     pd[i] = B_eta*(ps[i]-pt) + (eta - B_eta)*(p0[i]-pt)+pt   # eqn 2.2
 
 ## Plot
-labels = ['eta 0', 'eta 0.1', 'eta 0.2', 'eta 0.3', 'eta 0.4', 'eta 0.5', 'eta 0.6', 'eta 0.7', 'eta 0.8', 'eta 0.85', 'eta 0.9', 'eta 0.95', 'eta 1']
+labels = ['eta 0', 'eta 0.1', 'eta 0.2', 'eta 0.3', 'eta 0.4', 'eta 0.5', 'eta 0.6', 'eta 0.7', 'eta 0.8', 'eta 0.85', 'eta 0.9', 'eta 0.95', 'eta 1 = sfc pressure']
 
 fig, ax = plt.subplots(1,1, figsize=myfigsize)
 #P_plot = ax.contour(P.T, levs)
@@ -240,6 +247,23 @@ plt.title('Part 3: X-P graph with pressures of constant eta values')
 plt.savefig(fig_dir+run_date+'part3_plot'+'.png')
 #plt.show()
 
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
+#P_plot = ax.contour(P.T, levs)
+eta_plot = ax.plot(x,pd)
+#ax.fill(x,p_sfc_hyp)
+ax.invert_yaxis()
+ax.set_xlabel('x-domain (km)')
+ax.set_ylabel('Pressure (kPa)')
+# ax2 = ax.twinx()
+# ax2.set_ylabel('Height (km)')
+# ax2.fill(x,zground)
+# ax2.set_ylim(0,30)
+# ax.plot(x,p_sfc_hyp, label='surface pressure')
+plt.legend(eta_plot, labels)
+#fig.tight_layout()
+plt.title('Part 3: X-P graph with pressures of constant eta values')
+plt.savefig(fig_dir+run_date+'part3_plot2'+'.png')
+#plt.show()
 
 
 #%% Part 4
@@ -273,3 +297,6 @@ plt.title('Part 4: X-Z graph with altitudes of constant eta values')
 plt.savefig(fig_dir+run_date+'part4_plot'+'.png')
 
 
+
+
+# %%
