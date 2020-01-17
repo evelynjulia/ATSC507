@@ -3,3 +3,9 @@
 *.csv
 *.DS_Store
 *.pdf
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.aux
+
