@@ -297,6 +297,3 @@ plt.title('Part 4: X-Z graph with altitudes of constant eta values')
 plt.savefig(fig_dir+run_date+'part4_plot'+'.png')
 
 
-
-
-# %%
