@@ -140,20 +140,20 @@ row3=Psfc (kPa)
 
 from scipy import interpolate
 
-new_p_at_zground_arr = []
+p_sfc = []
 interp_levs = zground.copy()
 for i in range(len(x)):
     interp_eq = interpolate.interp1d(z, P[i])
     if interp_levs[i] > 0:
         print('need to interpolate at', i)
-        new_p_at_zground = interp_eq(interp_levs[i])
-        print(new_p_at_zground)
+        p_sfc_i = interp_eq(interp_levs[i])
+        print(p_sfc_i)
     else:
-        new_p_at_zground = Pmsl[i]
-    new_p_at_zground_arr = np.append(new_p_at_zground_arr, new_p_at_zground)
+        p_sfc_i = Pmsl[i]
+    p_sfc = np.append(p_sfc, p_sfc_i)
 
 
-print(new_p_at_zground_arr)
+print(p_sfc)
 
 
 
@@ -166,12 +166,12 @@ part_2_table = pd.DataFrame()
 
 part_2_table['x'] = x
 part_2_table['z_ground'] = zground
-part_2_table['p_sfc_(interpolation)'] = new_p_at_zground_arr
+part_2_table['p_sfc_(interpolation)'] = p_sfc
 
 ### could also do this by using hypsometric equation:
-new_test = P[:,0] *  np.exp( (z[0] - zground) / (a*Tkelvin[:,1]) )
+p_sfc_hyp = P[:,0] *  np.exp( (z[0] - zground) / (a*Tkelvin[:,1]) )
 
-part_2_table['p_sfc_(hypsometric_eqn)'] = new_test
+part_2_table['p_sfc_(hypsometric_eqn)'] = p_sfc_hyp
 
 part_2_table
 
@@ -212,8 +212,8 @@ eta_c = 0.3 # above this value eta becomes a pure pressure coordinate
 eta = np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1])
 pt = 2 # kPa p top
 
-ps = # p surface
-p0 = # reference sea-level pressure
+ps = p_sfc_hyp # p surface
+p0 = Pmsl # reference sea-level pressure
 
 
 # Equations:
@@ -225,14 +225,12 @@ c3 = (2 * (1 + eta_c + (eta_c**2) ) ) / ((1-eta_c)**3)
 c4 = (- (1 + eta_c) ) / ((1-eta_c)**3)
 
 
-B_eta = np.empty(len(eta)) # init empty array the right size
-
 # For all eta
 B_eta = c1 + c2*(eta) + c3*(eta**2) +c4*(eta**3)  # eqn 2.3
-
 # replace with B=0 for eta <= eta_c
 ind1 = np.where(eta <= eta_c)
 B_eta[ind1] = 0
+
 
 # Hybrid sigma-pressure vertical coordinate
 pi = B_eta*(ps-pt) + (eta - B_eta)*(p0-pt)+pt   # eqn 2.2
