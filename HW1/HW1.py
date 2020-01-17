@@ -207,6 +207,35 @@ eta =
 1
 '''
 
+# Given:
+eta_c = 0.3 # above this value eta becomes a pure pressure coordinate
+eta = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1]
+pt = 2 # kPa p top
+
+ps = # p surface
+p0 = # reference sea-level pressure
+
+
+# Equations:
+
+# eqns 2.5
+c1 = (2 * (eta_c**2)) / ((1-eta_c)**3)
+c2 = ( (- eta_c) * (4 + eta_c + eta_c**2) ) / ((1-eta_c)**3)
+c3 = (2 * (1 + eta_c + (eta_c**2) ) ) / ((1-eta_c)**3)
+c4 = (- (1 + eta_c) ) / ((1-eta_c)**3)
+
+
+B_eta = c1 + c2*(eta) + c3*(eta**2) +c4*(eta**3)  # eqn 2.3
+
+# Hybrid sigma-pressure vertical coordinate
+pi = B_eta*(ps-pt) + (eta - B_eta)*(p0-pt)+pt   # eqn 2.2
+
+
+
+
+
+
+
 
 #%% Part 4
 '''
