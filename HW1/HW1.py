@@ -48,8 +48,12 @@ import datetime as dt
 from scipy import interpolate
 import pandas as pd
 
-fig_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
-data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
+#fig_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
+#data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
+
+fig_dir = '/Users/catherinemathews/UBC/NWP'
+data_dir = '/Users/catherinemathews/UBC/NWP'
+
 
 run_date = dt.datetime.now().strftime('%y%m%d')
 
@@ -282,7 +286,8 @@ for lev in range(pd.shape[1]-1):
     # p1 = pd[:,lev+1] because of the order of the pd array (has 2kpa first)
     # p2 = pd[:,lev]
     # because pd[0] = array([ 2.  , 11.3 , 20.6 , 29.9 , 39.2 , 48.5 , 57.8 , 67.1 , 76.4 , 81.05, 85.7 , 90.35, 95.  ])
-    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev] 
+    # z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev] 
+    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,(12-lev)]/pd[:,(11-lev)]) ) +z_eta[:,lev]
 
 labels2 = ['eta 1','eta 0.95','eta 0.9','eta 0.85','eta 0.8','eta 0.7','eta 0.6','eta 0.5','eta 0.4','eta 0.3','eta 0.2','eta 0.1','eta 0']
 
