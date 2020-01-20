@@ -48,11 +48,11 @@ import datetime as dt
 from scipy import interpolate
 import pandas as pd
 
-#fig_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
-#data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
+fig_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
+data_dir = '/Users/ewicksteed/Documents/Eve/507/HW1/'
 
-fig_dir = '/Users/catherinemathews/UBC/NWP'
-data_dir = '/Users/catherinemathews/UBC/NWP'
+# fig_dir = '/Users/catherinemathews/UBC/NWP'
+# data_dir = '/Users/catherinemathews/UBC/NWP'
 
 
 run_date = dt.datetime.now().strftime('%y%m%d')
