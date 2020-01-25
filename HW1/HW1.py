@@ -1,3 +1,4 @@
+# %%
 # Eve Wicksteed
 # HW 1
 # NWP - ASC 507
@@ -69,7 +70,7 @@ On the same plot, plot the altitude of Zground.
 dx = 20
 x = np.arange(0,1020,dx)
 
-dz = 1
+dz = 0.001
 z = np.arange(0,31,dz)
 
 Pmsl = 95 + 0.01*x
@@ -211,6 +212,7 @@ pt = 2 # kPa p top
 
 ps = p_sfc_hyp # p surface
 p0 = Pmsl # reference sea-level pressure
+#p0 = 100
 
 # Equations:
 
@@ -230,26 +232,27 @@ B_eta[ind1] = 0
 pd = np.empty((len(x), len(eta)))
 for i in range(len(x)):
     pd[i] = B_eta*(ps[i]-pt) + (eta - B_eta)*(p0[i]-pt)+pt   # eqn 2.2
+    #pd[i] = B_eta*(ps[i]-pt) + (eta - B_eta)*(p0-pt)+pt
 
 ## Plot
 labels = ['eta 0', 'eta 0.1', 'eta 0.2', 'eta 0.3', 'eta 0.4', 'eta 0.5', 'eta 0.6', 'eta 0.7', 'eta 0.8', 'eta 0.85', 'eta 0.9', 'eta 0.95', 'eta 1 = sfc pressure']
 
-fig, ax = plt.subplots(1,1, figsize=myfigsize)
-#P_plot = ax.contour(P.T, levs)
-eta_plot = ax.plot(x,pd)
-#ax.fill(x,p_sfc_hyp)
-ax.invert_yaxis()
-ax.set_xlabel('x-domain (km)')
-ax.set_ylabel('Pressure (kPa)')
-ax2 = ax.twinx()
-ax2.set_ylabel('Height (km)')
-ax2.fill(x,zground)
-ax2.set_ylim(0,30)
-plt.legend(eta_plot, labels)
-#fig.tight_layout()
-plt.title('Part 3: X-P graph with pressures of constant eta values')
-plt.savefig(fig_dir+run_date+'part3_plot'+'.png')
-#plt.show()
+# fig, ax = plt.subplots(1,1, figsize=myfigsize)
+# #P_plot = ax.contour(P.T, levs)
+# eta_plot = ax.plot(x,pd)
+# #ax.fill(x,p_sfc_hyp)
+# ax.invert_yaxis()
+# ax.set_xlabel('x-domain (km)')
+# ax.set_ylabel('Pressure (kPa)')
+# ax2 = ax.twinx()
+# ax2.set_ylabel('Height (km)')
+# ax2.fill(x,zground)
+# ax2.set_ylim(0,30)
+# plt.legend(eta_plot, labels)
+# #fig.tight_layout()
+# plt.title('Part 3: X-P graph with pressures of constant eta values')
+# plt.savefig(fig_dir+run_date+'part3_plot'+'.png')
+# #plt.show()
 
 fig, ax = plt.subplots(1,1, figsize=myfigsize)
 #P_plot = ax.contour(P.T, levs)
@@ -277,17 +280,47 @@ the same eta values as in part (3) above. Make use of the hypsometric eq to find
 z at the pressure levels that correspond to the requested eta values.
 '''
 
-# so now we have Pd which is the pressure levels and we need to find z from pd:
+eta2 = eta[::-1]
+# pd2 = pd[:,::-1]
 
+# so now we have Pd which is the pressure levels and we need to find z from pd:
+#test = np.zeros(len(zground))
 z_eta = np.empty((len(x),len(eta)))
 z_eta[:,0] = zground
+#z_eta[:,0] = test
+T4 = np.empty((len(x),len(eta)))
 for lev in range(pd.shape[1]-1):
     # z2 = (a*Tkelvin * ln( P1/P2)) + z1
     # p1 = pd[:,lev+1] because of the order of the pd array (has 2kpa first)
     # p2 = pd[:,lev]
     # because pd[0] = array([ 2.  , 11.3 , 20.6 , 29.9 , 39.2 , 48.5 , 57.8 , 67.1 , 76.4 , 81.05, 85.7 , 90.35, 95.  ])
     # z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev] 
-    z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,(12-lev)]/pd[:,(11-lev)]) ) +z_eta[:,lev]
+    if z_eta[:,lev].any()<12:
+        #print('yes')
+        T4[:,lev] = (40 - 0.08*x)  -  6.5*z_eta[:,lev] 
+    else: 
+        #print(z[j], "is more than 12")
+        T4[:,lev] = (40 - 0.08*x)  -  6.5*12   
+    T4[:,lev] = T4[:,lev] + 237.15
+    #z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd2[:,lev+1]/pd2[:,lev]) ) +z_eta[:,lev] 
+    z_eta[:,lev+1]= (a*T4[:,lev]* np.log(pd[:,(12-lev)]/pd[:,(11-lev)]) ) +z_eta[:,lev]
+
+
+# T = np.empty((len(x),len(z)))
+
+# for j in range(len(z)):
+#     if z[j]<12:
+#         #print(z[j], "is less than 12")
+#         T[:,j] = (40 - 0.08*x)  -  6.5*z[j]
+#     else: 
+#         #print(z[j], "is more than 12")
+#         T[:,j] = (40 - 0.08*x)  -  6.5*12
+
+
+# Tkelvin = T + 273
+
+
+
 
 labels2 = ['eta 1','eta 0.95','eta 0.9','eta 0.85','eta 0.8','eta 0.7','eta 0.6','eta 0.5','eta 0.4','eta 0.3','eta 0.2','eta 0.1','eta 0']
 
@@ -298,7 +331,19 @@ ax.set_xlabel('x-domain (km)')
 ax.set_ylabel('Height (km)')
 plt.legend(eta_plot2, labels2)
 plt.title('Part 4: X-Z graph with altitudes of constant eta values')
-#plt.show()
+plt.show()
 plt.savefig(fig_dir+run_date+'part4_plot'+'.png')
+
+
+
+
+
+
+
+# %%
+
+for a in range(len(pd)-1):
+    #print(a)
+    np.where(np.round(P,2)==np.round(pd,2)[a,1])
 
 
