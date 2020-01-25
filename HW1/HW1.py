@@ -242,22 +242,7 @@ for i in range(len(x)):
 ## Plot
 labels = ['eta 0', 'eta 0.1', 'eta 0.2', 'eta 0.3', 'eta 0.4', 'eta 0.5', 'eta 0.6', 'eta 0.7', 'eta 0.8', 'eta 0.85', 'eta 0.9', 'eta 0.95', 'eta 1 = sfc pressure']
 labels2 = labels[::-1]
-# fig, ax = plt.subplots(1,1, figsize=myfigsize)
-# #P_plot = ax.contour(P.T, levs)
-# eta_plot = ax.plot(x,pd)
-# #ax.fill(x,p_sfc_hyp)
-# ax.invert_yaxis()
-# ax.set_xlabel('x-domain (km)')
-# ax.set_ylabel('Pressure (kPa)')
-# ax2 = ax.twinx()
-# ax2.set_ylabel('Height (km)')
-# ax2.fill(x,zground)
-# ax2.set_ylim(0,30)
-# plt.legend(eta_plot, labels)
-# #fig.tight_layout()
-# plt.title('Part 3: X-P graph with pressures of constant eta values')
-# plt.savefig(fig_dir+run_date+'part3_plot'+'.png')
-# #plt.show()
+
 
 fig, ax = plt.subplots(1,1, figsize=myfigsize)
 #P_plot = ax.contour(P.T, levs)
@@ -286,56 +271,16 @@ the same eta values as in part (3) above. Make use of the hypsometric eq to find
 z at the pressure levels that correspond to the requested eta values.
 '''
 
-# eta2 = eta[::-1]
-# pd2 = pd[:,::-1]
-
-# # so now we have Pd which is the pressure levels and we need to find z from pd:
-# #test = np.zeros(len(zground))
-# z_eta = np.empty((len(x),len(eta)))
-# z_eta[:,0] = zground
-# #z_eta[:,0] = test
-# T4 = np.empty((len(x),len(eta)))
-# for lev in range(pd.shape[1]-1):
-#     # z2 = (a*Tkelvin * ln( P1/P2)) + z1
-#     # p1 = pd[:,lev+1] because of the order of the pd array (has 2kpa first)
-#     # p2 = pd[:,lev]
-#     # because pd[0] = array([ 2.  , 11.3 , 20.6 , 29.9 , 39.2 , 48.5 , 57.8 , 67.1 , 76.4 , 81.05, 85.7 , 90.35, 95.  ])
-#     # z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev] 
-#     if z_eta[:,lev].all()<12:
-#         #print('yes')
-#         T4[:,lev] = (40 - 0.08*x)  -  6.5*z_eta[:,lev] 
-#     else: 
-#         #print(z[j], "is more than 12")
-#         T4[:,lev] = (40 - 0.08*x)  -  6.5*12   
-#     T4[:,lev] = T4[:,lev] + 237.15
-#     #z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd2[:,lev+1]/pd2[:,lev]) ) +z_eta[:,lev] 
-#     #z_eta[:,lev+1]= (a*T4[:,lev]* np.log(pd[:,(12-lev)]/pd[:,(11-lev)]) ) +z_eta[:,lev]
-#     z_eta[:,lev+1]= (a*T4[:,lev]* np.log(pd[:,lev]/pd[:,lev+1]) ) +z_eta[:,lev]
-
-
 z_eta = np.empty((len(x),len(eta)))
 z_eta[:,0] = zground
 T4 = np.empty((len(x),len(eta)))
 for lev in range(pd.shape[1]-1):
     # z2 = (a*Tkelvin * ln( P1/P2)) + z1
-    # z_eta[:,lev+1]= (a*Tkelvin[:,lev]* np.log(pd[:,lev+1]/pd[:,lev]) ) +z_eta[:,lev] 
-    if z_eta[:,lev].all()<12:
-        T4[:,lev] = (40 - 0.08*x)  -  6.5*z_eta[:,lev]
+    if all(a < 12 for a in z_eta[:,lev]):
+        T4[:,lev] = (40 - 0.08*x)  -  6.5*z_eta[:,lev] +273
     else: 
-        T4[:,lev] = (40 - 0.08*x)  -  6.5*12   
-    T4[:,lev] = T4[:,lev] + 237.15
+        T4[:,lev] = (40 - 0.08*x)  -  6.5*12 + 273
     z_eta[:,lev+1]= (a*T4[:,lev]* np.log(pd[:,lev]/pd[:,lev+1]) ) +z_eta[:,lev]
-
-
-
-for lev in range(pd.shape[1]-1):
-    print(lev)
-    if z_eta[:,lev].all()<12:
-
-        print('smaller')
-    else:
-        print('bigger')
-        
 
 
 
@@ -348,19 +293,6 @@ ax.set_xlabel('x-domain (km)')
 ax.set_ylabel('Height (km)')
 plt.legend(eta_plot2, labels2)
 plt.title('Part 4: X-Z graph with altitudes of constant eta values')
-plt.show()
-#plt.savefig(fig_dir+run_date+'part4_plot'+'.png')
-
-
-
-
-
-
-
-# %%
-
-for a in range(len(pd)-1):
-    #print(a)
-    np.where(np.round(P,2)==np.round(pd,2)[a,1])
-
+#plt.show()
+plt.savefig(fig_dir+run_date+'part4_plot'+'.png')
 
