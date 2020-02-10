@@ -8,4 +8,6 @@
 *.fdb_latexmk
 *.synctex.gz
 *.aux
-
+wrf_HW2
+*.png
+*.txt
