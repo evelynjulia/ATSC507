@@ -85,7 +85,6 @@ lat = n_hem['lat']*to_rad
 lon = n_hem['lon']*to_rad
 
 L = R0 * ( 1 + np.sin(ref_lat*to_rad) )
-
 r = L * np.tan(0.5* (90-lat))
 
 x = r * np.cos(lon)
@@ -94,15 +93,29 @@ y = r * np.sin(lon)
 # %% Other lines to plot
 
 # get equator line
-eq_lat = np.zeros((len(lat)))
+eq_lat = np.zeros(len(lat))
 eq_lat_rad = eq_lat*to_rad
 eq_r = L * np.tan(0.5* (90-eq_lat_rad))
 
 eq_x = eq_r * np.cos(lon)
 eq_y = eq_r * np.sin(lon)
 
-# get lon 0, 45, 90, 180, -45, -90
+# get lon 0, 45, 90, 135, 180, -45, -90, -135
 
+all_lat = np.arange(0,90,0.001)
+all_lat_rad = all_lat*to_rad
+all_r = r = L * np.tan(0.5* (90-all_lat_rad))
+
+lon0 = np.zeros(len(all_lat))
+lon45 = np.ones(len(lon)) * 45
+lon90 = np.ones(len(lon)) * 90
+lon135 = np.ones(len(lon)) * 135
+
+x0 = all_r * np.cos(lon0)
+y0 = all_r * np.sin(lon0)
+
+# plt.plot(x0,y0,'.',markersize=0.1)
+# plt.show()
 
 
 # %% PLOTS
@@ -114,24 +127,28 @@ fig, ax = plt.subplots(1,1, figsize=myfigsize)
 # plt.plot(namer['lon'], namer['lat'],  '.', markersize=0.1)
 # plt.plot(asia_n['lon'], asia_n['lat'],  '.', markersize=0.1)
 # plt.plot(europe['lon'], europe['lat'],  '.', markersize=0.1)
-plt.plot(n_hem['lon'], n_hem['lat'],  '.', markersize=0.1)
+plt.plot(n_hem['lon'], n_hem['lat'], '.', markersize=0.1)
 plt.grid()
 ax.set_xlabel("Longitude (\N{DEGREE SIGN})")
 ax.set_ylabel("Latitude (\N{DEGREE SIGN})")
 plt.title("Northern Hemisphere coastlines: lat-lon grid")
 ax.set_ylim(-5,95)
 plt.show()
-#plt.savefig(fig_dir+run_date+plt1+'.png')
+#plt.savefig(fig_dir+run_date+'_'+plt1+'.png')
 
 fig, ax = plt.subplots(1,1, figsize=(9,9))
 ax.plot(x, y, '.', markersize=0.1)
 ax.plot(eq_x, eq_y, '.', markersize=0.1)
+#plt.plot(x0,y0,'.',markersize=0.1)
 ax.set_xlabel("x (km)")
 ax.set_ylabel("y (km)")
 plt.title("Northern Hemisphere coastlines: polar stereographic grid")
 plt.show()
-#plt.savefig(fig_dir+run_date+plt2.+'.png')
+#plt.savefig(fig_dir+run_date+'_'+plt2+'.png')
 
 
 
 
+
+
+# %%
