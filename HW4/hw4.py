@@ -66,7 +66,7 @@ run_date = dt.datetime.now().strftime('%y%m%d')
 #f = 1.5 * ( 2 – 1.5*t – ( T / (2 – 1.5*t) ) )
 T_n = 2
 del_t = 1
-t = 0
+tn = 0
 
 f_tn = 1.5 * ( 2 -(1.5*t)-( T_n / (2-1.5*t) ) )
 
@@ -105,7 +105,14 @@ T_np1_RK3 = T_n + ( del_t * f_tstar2_RK3 )
 
 # f_tn = 1.5 * ( 2 -(1.5*tn)-( T_n / (2-1.5*tn) ) )
 
-k1 = 
-k2 = 
-k3 = 
+k1 = f_tn
+# T_star_RK4 = T_n + ( (del_t/2) * k1 )
+# k2 = 1.5 * ( 2 -(1.5*(tn+(del_t/2)))-( T_star_RK4 / (2-1.5*(tn+(del_t/2))) ) )
 
+k2 = 1.5 * ( 2 -(1.5*(tn+(del_t/2)))-( (T_n + (del_t/2)*k1) / (2-1.5*(tn+(del_t/2))) ) )
+k3 = 1.5 * ( 2 -(1.5*(tn+(del_t/2)))-( (T_n + (del_t/2)*k2) / (2-1.5*(tn+(del_t/2))) ) )
+k4 = 1.5 * ( 2 -(1.5*(tn+(del_t/2)))-( (T_n + (del_t)*k3) / (2-1.5*(tn+del_t)) ) )
+
+T_np1_RK4 = T_n + (del_t/6) * (k1 + 2*k2 + 2*k3 + k4)
+
+# gives T_np1 = 1.0325
