@@ -111,8 +111,33 @@ k1 = f_tn
 
 k2 = 1.5 * ( 2 -(1.5*(tn+(del_t/2)))-( (T_n + (del_t/2)*k1) / (2-1.5*(tn+(del_t/2))) ) )
 k3 = 1.5 * ( 2 -(1.5*(tn+(del_t/2)))-( (T_n + (del_t/2)*k2) / (2-1.5*(tn+(del_t/2))) ) )
-k4 = 1.5 * ( 2 -(1.5*(tn+(del_t/2)))-( (T_n + (del_t)*k3) / (2-1.5*(tn+del_t)) ) )
+k4 = 1.5 * ( 2 -(1.5*(tn+del_t))-( (T_n + (del_t)*k3) / (2-1.5*(tn+del_t)) ) )
 
 T_np1_RK4 = T_n + (del_t/6) * (k1 + 2*k2 + 2*k3 + k4)
 
-# gives T_np1 = 1.0325
+# gives T_np1 = 0.845
+
+
+# %% Analytical solution
+
+'''
+T(°C) =A * (c*m*∆t + Tref - Tref_o) * (Tref_o - c*m*∆t)
+with Tref_o = 2,  A = 1,  c = 1.5,  ∆t = 1,  and  t = m*∆t.
+'''
+
+Tref_o = 2
+A = 1
+c = 1.5
+dt = 1
+m = 1
+t = m*dt
+Tref = 2
+
+
+T_anl = A * (c*m*dt + Tref - Tref_o) * (Tref_o - c*m*dt)
+T_anl
+
+# The analytical solution is T_np1 = 0.75
+
+
+# THe actual solution should be about 1.3... Because that's what it shows on the diagram
