@@ -131,13 +131,40 @@ c = 1.5
 dt = 1
 m = 1
 t = m*dt
-Tref = 2
+Tref = 3
 
 
 T_anl = A * (c*m*dt + Tref - Tref_o) * (Tref_o - c*m*dt)
 T_anl
 
-# The analytical solution is T_np1 = 0.75
+# The analytical solution is T_np1 = 1.25
 
 
-# THe actual solution should be about 1.3... Because that's what it shows on the diagram
+# %%
+
+# # plot for m = 0, 1 and T between 1 and 6
+
+# m = np.arange(0,1,0.01)
+
+# Tref_o = 2
+# A = 1
+# c = 1.5
+# dt = 1
+
+# t = m*dt
+# Tref = 2
+
+# T_anl0 = A * (c*m*dt + 0) * (Tref_o - c*m*dt)
+# T_anl1 = A * (c*m*dt + 1) * (Tref_o - c*m*dt)
+# T_anl2 = A * (c*m*dt + 2) * (Tref_o - c*m*dt)
+# T_anl6 = A * (c*m*dt + 3) * (Tref_o - c*m*dt)
+# T_anl8 = A * (c*m*dt + 4) * (Tref_o - c*m*dt)
+
+# plt.plot(m,T_anl0, label = "Tref = 2")
+# plt.plot(m,T_anl1, label = 'Tref = 3')
+# plt.plot(m,T_anl2, label = 'Tref = 4')
+# plt.plot(m,T_anl6, label = 'Tref = 5')
+# plt.plot(m,T_anl8, label = 'Tref = 6')
+# plt.grid()
+# plt.legend()
+# plt.show()
