@@ -144,6 +144,21 @@ print("Analytical solution =", T_anl)
 # The analytical solution is T_np1 = 1.25
 
 
+#%% [markdown]
+
+## Answers:
+
+# a) Euler forward
+
+# b) RK2
+
+# c) RK3
+
+# d) RK4
+
+# e) Which one gave an answer closest to the actual analytical answer as 
+#given by the function above?   
+
 # %%
 
 # # plot for m = 0, 1 and T between 1 and 6
