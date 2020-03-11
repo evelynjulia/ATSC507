@@ -27,7 +27,7 @@ fig_dir = str(current_dir)+'/HW7/'
 
 run_date = dt.datetime.now().strftime('%y%m%d')
 
-myfigsize = (15,9)
+myfigsize = (9,4)
 
 # %% Create the grid and initial conditions
 
@@ -71,6 +71,32 @@ c_ideal[720:741] = np.linspace(0, -0.5*c_max, 21)    # insert left side of trian
 c_ideal[740:761] = np.linspace(-0.5*c_max, 0, 21)    # insert right side of triangle
 
 
+
+
+# %% 4) Advect the concentration puff anomaly 
+
+# for the following number of time steps, plot (in green) the resulting concentration on the same graph, using FTBS
+nsteps = (max_x - 300) / (u * dt / dx)
+iters = np.arange(0,nsteps,1)
+#  "forward in time, backward in space" (FTBS) .
+
+# initial concentration (made longer so the diff can be the same length)
+c_now = np.append(0, conc.copy())
+
+for time_step in iters:
+    #print(time_step)
+    d_conc = np.diff(c_now)
+    c_next = ( -Cr * d_conc ) + c_now[1:len(c_now)]
+    c_now = np.append(0, c_next.copy())
+
+c_FTBS = c_now.copy()[0:1000]
+
+plt.plot(conc)
+plt.plot(c_now)
+plt.show()
+
+
+
 # %% 2b) Plot (using blue colour) the initial concentration distribution on a graph.
 
 xvals = np.arange(0,1000,1)
@@ -81,23 +107,19 @@ xvals = np.arange(0,1000,1)
 fig, ax = plt.subplots(1,1, figsize=myfigsize)
 ax.plot(xvals,conc, color = 'b', label = 'original concentration')
 ax.plot(xvals,c_ideal, color='r', label = 'exact final solution')
+ax.plot(xvals, c_FTBS, color='g', label = 'FTBS solution')
 ax.set_xlabel("Grid index (i)")
 ax.set_ylabel("Quantity")
 #plt.title("")
 # ax.set_ylim(-5,95)
 plt.legend()
 #plt.show()
-plt.savefig(fig_dir+run_date+'_'+'example_plot'+'.png')
+plt.savefig(fig_dir+'FTBS'+'_'+run_date+'.png')
 
 
-
-# %% 4) Advect the concentration puff anomaly for the following number of time steps
-
-
-nsteps = (max_x - 300) / (u * dt / dx)
-# and plot (in green) the resulting concentration on the same graph, using ...
-
-#  "forward in time, backward in space" (FTBS) .
-#              [See a sample of this output below.]
+# %%  5) 
+#
+#  Repeat steps (2-4) to re-initialize, but plotting (in green) on a new graph, and using
+# RK3 for the advection.  Use same number of time steps.
 
 
