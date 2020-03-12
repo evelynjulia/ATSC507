@@ -2,8 +2,12 @@
 title: "HW7"
 author: "Eve Wicksteed"
 date: "11/03/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
+
+# Part 6 - PPM scheme advection
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -72,6 +76,9 @@ legend(400, 10, legend=c("cideal", "conc orig"),
 
 
 ```
+## PPM scheme code
+
+Here I use the code that was provided for the homework. 
 
 ```{r}
 
@@ -209,15 +216,10 @@ for (n in 1:nsteps) {                   # for each time step n
 ```
 
 
-```{r}
-#conc
+## PPM plot
 
-plot(xvals, cideal, col = 'red', type = "l")
-lines(xvals, conc_orig, col = 'blue')
-lines(xvals, conc, col = 'green')
-legend(400, 10, legend=c("cideal", "conc orig", "PPM"), 
-       col=c("red", "blue", "green"), lty=1, cex=0.8)
-```
+This shows the original concentration and both solutions. 
+
 ```{r}
 df <- data.frame("Original Concentration" = conc_orig, 
                  "Ideal solution" = cideal, 
