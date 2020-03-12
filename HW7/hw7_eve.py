@@ -13,6 +13,7 @@ import pandas as pd
 import math 
 from pathlib import Path
 import os
+from scipy.ndimage.interpolation import shift
 
 current_dir = os.getcwd()
 fig_dir = str(current_dir)+'/HW7/'
@@ -122,4 +123,54 @@ plt.savefig(fig_dir+'FTBS'+'_'+run_date+'.png')
 #  Repeat steps (2-4) to re-initialize, but plotting (in green) on a new graph, and using
 # RK3 for the advection.  Use same number of time steps.
 
+# part 2 again:
+conc = np.zeros(max_x) # initial concentration of background is zero
+c_max = 10.0                      # max initial concentration
+conc[100:151] = np.linspace(0, c_max, 51)   # insert left side of triangle
+conc[150:201] = np.linspace(c_max, 0, 51)        # insert right side of triangle
+conc[20:41] = np.linspace(0, -0.5*c_max, 21)    # insert left side of triangle
+conc[40:61] = np.linspace(-0.5*c_max, 0, 21)  
 
+# part 3 again:
+c_ideal = np.zeros(max_x) # initial concentration of ideal background is zero
+c_ideal[800:851] = np.linspace(0, c_max, 51)    # insert left side of triangle
+c_ideal[850:901] = np.linspace(c_max, 0, 51)    # insert right side of triangle
+c_ideal[720:741] = np.linspace(0, -0.5*c_max, 21)    # insert left side of triangle
+c_ideal[740:761] = np.linspace(-0.5*c_max, 0, 21)    # insert right side of triangle
+
+nsteps = (max_x - 300) / (u * dt / dx)
+iters = np.arange(0,nsteps,1)
+
+### RK3 
+
+c_now_RK3 = conc.copy()
+
+for time_step in iters:
+    #print(time_step)
+    d_conc1 = shift(c_now_RK3, 1, cval=0) - shift(c_now_RK3, -1, cval=0) # c(j+1) - c(j-1)
+    d_conc2 = shift(c_now_RK3, 2, cval=0) - shift(c_now_RK3, -2, cval=0) # c(j+2) - c(j-2)
+    d_conc3 = shift(c_now_RK3, 3, cval=0) - shift(c_now_RK3, -3, cval=0) # c(j+3) - c(j-3)
+    c_next_RK3 = ( (1- (Cr**2)/4)*c_now_RK3 ) - ( ((Cr/2)- (3*(Cr**3)/48)) * (d_conc1) ) + ( ((Cr**2)/8) * (d_conc2) ) - ( ((Cr**3)/48) * (d_conc3) )
+    c_now_RK3 = c_next_RK3.copy()
+
+
+c_RK3 = c_now_RK3.copy()
+
+
+# %% Plot RK3 
+
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
+ax.plot(xvals, c_RK3, color='g', label = 'RK3 solution')
+ax.plot(xvals,conc, color = 'b', label = 'original concentration')
+ax.plot(xvals,c_ideal, color='r', label = 'exact final solution')
+ax.set_xlabel("Grid index (i)")
+ax.set_ylabel("Quantity")
+#plt.title("")
+# ax.set_ylim(-5,95)
+plt.legend()
+#plt.show()
+plt.savefig(fig_dir+'RK3'+'_'+run_date+'.png')
+
+
+
+# %% PPM Method
