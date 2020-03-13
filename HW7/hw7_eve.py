@@ -143,18 +143,72 @@ iters = np.arange(0,nsteps,1)
 
 ### RK3 
 
+
+# Tj(t+∆t) = Tj(t) + T_tendency_j 
+# where
+# T_tendency_j = 
+# – (1/2) * Cr * [T(j+1) - T(j) ] +
+
+# (Cr*Cr/8) * [ T(j+2) - 2 T(j) + T(j-2) ] -
+
+# (Cr*Cr*Cr/48) * [ T(j+3) - 3T(j+1) + 3T(j-1) - T(j-3) ]
+
+# where Cr = Courant number.
+#c_next = c_now_RK3 + T_tendency_j 
+
+#T_tendency_j = -(1/2) * Cr * (cjp1 - c_now_RK3) + (Cr*Cr/8) * (cjp2 + cjm2 - 2*c_now_RK3) - (Cr*Cr*Cr/48) * ( cjp3 - 3*cjp1 + 3*cjm1 - cjm3 )
+
+
+
 c_now_RK3 = conc.copy()
+cjm3 = shift(c_now_RK3, -3, cval=0)
+cjm2 = shift(c_now_RK3, -2, cval=0)
+cjm1 = shift(c_now_RK3, -1, cval=0)
+cjp1 = shift(c_now_RK3, 1, cval=0)
+cjp2 = shift(c_now_RK3, 2, cval=0)
+cjp3 = shift(c_now_RK3, 3, cval=0)
+
+
+plt.plot(c_now_RK3, label="now")
+plt.plot((cjm3), label = 'minus 3')
+plt.legend()
+plt.show()
+
+
 
 for time_step in iters:
-    #print(time_step)
-    d_conc1 = shift(c_now_RK3, 1, cval=0) - shift(c_now_RK3, -1, cval=0) # c(j+1) - c(j-1)
-    d_conc2 = shift(c_now_RK3, 2, cval=0) - shift(c_now_RK3, -2, cval=0) # c(j+2) - c(j-2)
-    d_conc3 = shift(c_now_RK3, 3, cval=0) - shift(c_now_RK3, -3, cval=0) # c(j+3) - c(j-3)
-    c_next_RK3 = ( (1- (Cr**2)/4)*c_now_RK3 ) - ( ((Cr/2)- (3*(Cr**3)/48)) * (d_conc1) ) + ( ((Cr**2)/8) * (d_conc2) ) - ( ((Cr**3)/48) * (d_conc3) )
+    T_tendency_j = -(1/2) * Cr * (cjp1 - c_now_RK3) + (Cr*Cr/8) * (cjp2 + cjm2 - 2*c_now_RK3) - (Cr*Cr*Cr/48) * ( cjp3 - 3*cjp1 + 3*cjm1 - cjm3 )
+    c_next_RK3 = c_now_RK3 + T_tendency_j 
     c_now_RK3 = c_next_RK3.copy()
+    cjm3 = shift(c_now_RK3, -3, cval=0)
+    cjm2 = shift(c_now_RK3, -2, cval=0)
+    cjm1 = shift(c_now_RK3, -1, cval=0)
+    cjp1 = shift(c_now_RK3, 1, cval=0)
+    cjp2 = shift(c_now_RK3, 2, cval=0)
+    cjp3 = shift(c_now_RK3, 3, cval=0)
 
 
 c_RK3 = c_now_RK3.copy()
+
+
+
+
+
+
+
+# ### previou version
+# c_now_RK3 = conc.copy()
+
+# for time_step in iters:
+#     #print(time_step)
+#     d_conc1 = shift(c_now_RK3, 1, cval=0) - shift(c_now_RK3, -1, cval=0) # c(j+1) - c(j-1)
+#     d_conc2 = shift(c_now_RK3, 2, cval=0) - shift(c_now_RK3, -2, cval=0) # c(j+2) - c(j-2)
+#     d_conc3 = shift(c_now_RK3, 3, cval=0) - shift(c_now_RK3, -3, cval=0) # c(j+3) - c(j-3)
+#     c_next_RK3 = ( (1- (Cr**2)/4)*c_now_RK3 ) - ( ((Cr/2)- (3*(Cr**3)/48)) * (d_conc1) ) + ( ((Cr**2)/8) * (d_conc2) ) - ( ((Cr**3)/48) * (d_conc3) )
+#     c_now_RK3 = c_next_RK3.copy()
+
+
+# c_RK3 = c_now_RK3.copy()
 
 
 # %% Plot RK3 
