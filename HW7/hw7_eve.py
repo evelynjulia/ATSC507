@@ -4,7 +4,7 @@
 # HW 7
 # NWP - ATSC 507
 
-#%% Import libraries
+# %% Import libraries
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
@@ -74,7 +74,7 @@ c_ideal[740:761] = np.linspace(-0.5*c_max, 0, 21)    # insert right side of tria
 
 
 
-# %% 4) Advect the concentration puff anomaly 
+# %% 4) Advect the concentration puff anomaly
 
 # for the following number of time steps, plot (in green) the resulting concentration on the same graph, using FTBS
 nsteps = (max_x - 300) / (u * dt / dx)
@@ -118,7 +118,7 @@ plt.legend()
 plt.savefig(fig_dir+'FTBS'+'_'+run_date+'.png')
 
 
-# %%  5) 
+# %% 5)
 #
 #  Repeat steps (2-4) to re-initialize, but plotting (in green) on a new graph, and using
 # RK3 for the advection.  Use same number of time steps.
@@ -161,7 +161,7 @@ for time_step in range(int(nsteps)-1):
 c_RK3 = big_matrix[-1,:]
 
 
-# %% Plot RK3 
+# %% Plot RK3
 
 fig, ax = plt.subplots(1,1, figsize=myfigsize)
 ax.plot(xvals,conc, color = 'b', label = 'original concentration')
