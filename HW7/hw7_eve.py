@@ -143,21 +143,33 @@ iters = np.arange(0,nsteps,1)
 
 ### RK3 
 
+########################
 
-# Tj(t+∆t) = Tj(t) + T_tendency_j 
-# where
-# T_tendency_j = 
-# – (1/2) * Cr * [T(j+1) - T(j) ] +
+mat = np.empty((int(nsteps), int(max_x)))
 
-# (Cr*Cr/8) * [ T(j+2) - 2 T(j) + T(j-2) ] -
+mat[0,:] = conc.copy()
 
-# (Cr*Cr*Cr/48) * [ T(j+3) - 3T(j+1) + 3T(j-1) - T(j-3) ]
+# for n in range(mat.shape[0]):
+#     for j in range(3, mat.shape[1]):
 
-# where Cr = Courant number.
-#c_next = c_now_RK3 + T_tendency_j 
 
-#T_tendency_j = -(1/2) * Cr * (cjp1 - c_now_RK3) + (Cr*Cr/8) * (cjp2 + cjm2 - 2*c_now_RK3) - (Cr*Cr*Cr/48) * ( cjp3 - 3*cjp1 + 3*cjm1 - cjm3 )
+for n in range(mat.shape[0]-1):
+    print(n)
+    for j in range(3, mat.shape[1]-3):
+        mat[n+1, j+1] = mat[n,j] + -(1/2) * Cr * (mat[n,j+1] - mat[n,j]) + (Cr*Cr/8) * (mat[n,j+2] + mat[n,j-2] - 2*mat[n,j]) - (Cr*Cr*Cr/48) * ( mat[n,j+3] - 3*mat[n,j+1] + 3*mat[n,j-1] - mat[n,j-3] )
 
+
+plt.plot(mat[0,:])
+plt.plot(mat[-1,:])
+plt.show()
+
+#    mat[1,j] = c_now_RK3 + -(1/2) * Cr * (cjp1 - c_now_RK3) + (Cr*Cr/8) * (cjp2 + cjm2 - 2*c_now_RK3) - (Cr*Cr*Cr/48) * ( cjp3 - 3*cjp1 + 3*cjm1 - cjm3 )
+    
+ #   cjm3
+ #   cjm2
+    print(j)
+
+########################
 
 
 c_now_RK3 = conc.copy()
@@ -167,25 +179,29 @@ cjm1 = shift(c_now_RK3, -1, cval=0)
 cjp1 = shift(c_now_RK3, 1, cval=0)
 cjp2 = shift(c_now_RK3, 2, cval=0)
 cjp3 = shift(c_now_RK3, 3, cval=0)
+c_next_RK3 = c_now_RK3 + -(1/2) * Cr * (cjp1 - c_now_RK3) + (Cr*Cr/8) * (cjp2 + cjm2 - 2*c_now_RK3) - (Cr*Cr*Cr/48) * ( cjp3 - 3*cjp1 + 3*cjm1 - cjm3 )
 
 
 plt.plot(c_now_RK3, label="now")
 plt.plot((cjm3), label = 'minus 3')
+
+plt.plot(c_now_RK3, label = 'now ')
+plt.plot(c_next_RK3, label = 'next')
 plt.legend()
 plt.show()
 
 
 
 for time_step in iters:
-    T_tendency_j = -(1/2) * Cr * (cjp1 - c_now_RK3) + (Cr*Cr/8) * (cjp2 + cjm2 - 2*c_now_RK3) - (Cr*Cr*Cr/48) * ( cjp3 - 3*cjp1 + 3*cjm1 - cjm3 )
-    c_next_RK3 = c_now_RK3 + T_tendency_j 
-    c_now_RK3 = c_next_RK3.copy()
     cjm3 = shift(c_now_RK3, -3, cval=0)
     cjm2 = shift(c_now_RK3, -2, cval=0)
     cjm1 = shift(c_now_RK3, -1, cval=0)
     cjp1 = shift(c_now_RK3, 1, cval=0)
     cjp2 = shift(c_now_RK3, 2, cval=0)
     cjp3 = shift(c_now_RK3, 3, cval=0)
+    T_tendency_j = -(1/2) * Cr * (cjp1 - c_now_RK3) + (Cr*Cr/8) * (cjp2 + cjm2 - 2*c_now_RK3) - (Cr*Cr*Cr/48) * ( cjp3 - 3*cjp1 + 3*cjm1 - cjm3 )
+    c_next_RK3 = c_now_RK3 + T_tendency_j 
+    c_now_RK3 = c_next_RK3.copy()
 
 
 c_RK3 = c_now_RK3.copy()
@@ -222,7 +238,7 @@ ax.set_ylabel("Quantity")
 #plt.title("")
 # ax.set_ylim(-5,95)
 plt.legend()
-#plt.show()
+plt.show()
 plt.savefig(fig_dir+'RK3'+'_'+run_date+'.png')
 
 
