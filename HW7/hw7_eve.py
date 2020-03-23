@@ -149,14 +149,14 @@ mat = np.empty((int(nsteps), int(max_x)))
 
 mat[0,:] = conc.copy()
 
-# for n in range(mat.shape[0]):
-#     for j in range(3, mat.shape[1]):
 
-
-for n in range(mat.shape[0]-1):
+for n in range(mat.shape[0]-1): #time steps
     print(n)
-    for j in range(3, mat.shape[1]-3):
-        mat[n+1, j+1] = mat[n,j] + -(1/2) * Cr * (mat[n,j+1] - mat[n,j]) + (Cr*Cr/8) * (mat[n,j+2] + mat[n,j-2] - 2*mat[n,j]) - (Cr*Cr*Cr/48) * ( mat[n,j+3] - 3*mat[n,j+1] + 3*mat[n,j-1] - mat[n,j-3] )
+    for j in range(3, mat.shape[1]-3): # spatial
+        mat[n+1, j+1] = mat[n,j] + 
+        (-1/2) * Cr * (mat[n,j+1] - mat[n,j]) 
+        + (Cr*Cr/8) * (mat[n,j+2] + mat[n,j-2] - 2*mat[n,j]) 
+        - (Cr*Cr*Cr/48) * ( mat[n,j+3] - 3*mat[n,j+1] + 3*mat[n,j-1] - mat[n,j-3] )
 
 
 plt.plot(mat[0,:])
@@ -191,7 +191,7 @@ plt.legend()
 plt.show()
 
 
-
+c_now_RK3 = conc.copy()
 for time_step in iters:
     cjm3 = shift(c_now_RK3, -3, cval=0)
     cjm2 = shift(c_now_RK3, -2, cval=0)
@@ -205,6 +205,41 @@ for time_step in iters:
 
 
 c_RK3 = c_now_RK3.copy()
+
+#####################
+# 23 march
+
+c_now_RK3 = conc.copy()
+
+big_matrix = np.empty((int(nsteps), int(max_x)))
+big_matrix[0,:] = c_now_RK3
+
+for time_step in range(int(nsteps)-1):
+    tjn = big_matrix[time_step,:]
+    term1 = -(1/2) * Cr * (np.roll(tjn,-1) - tjn)
+    term2 = (Cr*Cr/8) * (np.roll(tjn,-2) + np.roll(tjn,+2) - 2*tjn)
+    term3 = (Cr*Cr*Cr/48) * (np.roll(tjn,-3) - 3*np.roll(tjn,-1) + 3*np.roll(tjn,+1) - np.roll(tjn,+3))
+    tend = term1 + term2 - term3
+    tjnp1 = tjn + tend
+    big_matrix[time_step+1,:] = tjnp1
+
+
+### next attempts
+
+c_now_RK3 = conc.copy()
+
+big_matrix = np.empty((int(nsteps), int(max_x)))
+big_matrix[0,:] = c_now_RK3
+
+for time_step in range(int(nsteps)-1):
+    tjn = big_matrix[time_step,:]
+    t1 = (1 - (Cr**2)/4) * tjn
+    t2 = (Cr/2 - (3*Cr**3)/48 ) * ( np.roll(tjn,-1) - np.roll(tjn,+1) )
+    t3 = ( (Cr**2)/8 ) * (np.roll(tjn,-2) + np.roll(tjn,+2))
+    t4 = ((Cr**3)/48) * (np.roll(tjn,-3) - np.roll(tjn,+3))
+    big_matrix[time_step+1,:] = t1 - t2 + t3 - t4
+
+
 
 
 
