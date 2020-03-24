@@ -12,3 +12,8 @@ wrf_HW2
 *.png
 *.txt
 *vapor/*
+*.Rproj.user
+*.Rproj
+*.ipynb
+*.docx
+*.Rhistory
