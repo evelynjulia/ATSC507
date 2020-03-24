@@ -155,6 +155,26 @@ term4_16 = (Cr **6 / 144) * ((3*(np.sin(kdx))) - (4*(np.sin(kdx))**3))**2
 ak_sqr_16 = term1_16 + term2_16 - term3_16 - term4_16
 ak16 = np.sqrt(ak_sqr_16)
 
+# # %%
+# ##### plot for different Cr values
+
+
+# Cr = 0.9
+
+# m = np.arange(1,20,0.01)
+# kdx = 2*np.pi / m
+
+
+# term1 = (1 - (Cr**2 /4) + (Cr**2 /4)*(1 - 2*(np.sin(kdx))**2 ) )**2
+# term2 = ( -(Cr**4 / 6) + (Cr**6 / 48)  ) * (  3*(np.sin(kdx))**2   - 4*(np.sin(kdx))**4  )
+# term3 = (Cr - (Cr**3 / 8)) * ((np.sin(kdx))**2) 
+# term4 = (Cr **6 / 144) * ((3*(np.sin(kdx))) - (4*(np.sin(kdx))**3))**2
+# ak_sqr2 = term1 + term2 - term3 - term4
+# ak2 = np.sqrt(ak_sqr2)
+
+# plt.plot(m, ak2)
+# plt.show()
+
 
 # %% Plot for B3
 
