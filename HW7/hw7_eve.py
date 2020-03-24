@@ -92,9 +92,9 @@ for time_step in iters:
 
 c_FTBS = c_now.copy()[0:1000]
 
-plt.plot(conc)
-plt.plot(c_now)
-plt.show()
+# plt.plot(conc)
+# plt.plot(c_now)
+# plt.show()
 
 
 
