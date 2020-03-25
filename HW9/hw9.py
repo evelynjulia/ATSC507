@@ -31,20 +31,13 @@ c = 12 # this is a c12 sphere
 # set up x y and z values
 x = np.linspace(-a,a,c)
 y = np.linspace(-a,a,c)
-z = np.linspace(-a,a,c)
 
-x2d = np.ones((c,c)) *x
-y2d = np.ones((c,c)) *y
-z2d = np.ones((c,c)) *z
+# create the points along the edges
+xv, yv = np.meshgrid(x, y)
 
+# create the z values for cube
 top =  np.ones((c,c)) *2
 bottom =  np.ones((c,c)) *-2
-
-#xv, yv, zv = np.meshgrid(x, y, z)
-
-xv, yv = np.meshgrid(x, y)
-### #but don't want the inside points
-zv2 = np.meshgrid(z,z)
 
 # %%
 # plot
@@ -63,3 +56,8 @@ ax.plot_wireframe(xv, bottom, yv, color = 'g')
 plt.savefig(fig_dir+'step1_box'+'_'+run_date+'.png')
 
 # %%
+
+# set the radius of the sphere
+r = 2
+
+x, y, z = (r) / np.sqrt() * ()
