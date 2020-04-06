@@ -263,5 +263,16 @@ N = 20
 
 BSS = 1 - ( (sum((pk-ok)**2)) /  ( (sum(ok)) * (N - sum(ok))  ) ) 
 
+# %% B
 
+# Reliabilty diagram
 
+dp = 0.2
+
+# get bins:
+
+bins = np.arange(0, 1.2, 0.2)
+
+# find which obs goes in which bin... 
+
+j = np.ceil((pk / dp))
