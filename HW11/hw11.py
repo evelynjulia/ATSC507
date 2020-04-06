@@ -29,7 +29,7 @@ verif = np.array([[5.3, 5.3, 5.3, 5.4],[5.4, 5.3, 5.4, 5.5],[5.5, 5.4, 5.5, 5.5]
 
 clim = np.array([[5.4, 5.4, 5.4, 5.4],[5.4, 5.4, 5.4, 5.4],[5.5, 5.5, 5.5, 5.5],[5.6, 5.6, 5.6, 5.6],[5.7, 5.7, 5.7, 5.7]])
 
-# %% create error functions
+# %% A19
 
 
 
@@ -144,3 +144,40 @@ data = {"ME_fcst": [ME_fcst],
 df = pd.DataFrame(data) 
 
 df.to_csv(my_out_dir+"error_metrics.csv")
+
+
+
+# %% A 20
+
+# have the following contingincy table:
+
+a = 150
+b = 65
+c = 50
+d = 100
+
+n = a + b + c + d
+
+E = ((a+b)/n)* ((a+c)/n) + ((d+b)/n)*((d+c)/n)
+
+a_random = ((a+b)*(a+c)) / (n)
+
+# %%
+# So now calculate all binary verification stats
+
+bias = (a+b) / (a+c)
+
+portion_correct = (a + d) / n
+
+HSS = (portion_correct - E) / (1-E)
+
+hit_rate = a / (a + c)
+
+FA_rate =  b/ (b+d)# false alarm rate
+
+FA_ratio = b / (a+b) # false alarm ratio
+
+TSS = hit_rate - FA_rate # true skill score
+
+CSI = a / (a+b+c) # critical success index
+
