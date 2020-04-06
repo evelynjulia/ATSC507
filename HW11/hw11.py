@@ -9,6 +9,11 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+import os
+
+current_dir = os.getcwd()
+my_out_dir = str(current_dir)+'/HW11/'
 
 
 # %% Set up data
@@ -98,5 +103,44 @@ print("the persistance anomaly correlation is", round(AC_persist,3))
 
 # %% k. Draw height contours by hand for each field, to show locations of ridges and troughs.
 
-plt.contour(anal)
-plt.show()
+plt.contour(anal, linewidths=4)
+#plt.show()
+plt.savefig(my_out_dir+'anal'+'.png')
+
+plt.contour(fcst, linewidths=4)
+#plt.show()
+plt.savefig(my_out_dir+'fcst'+'.png')
+
+plt.contour(verif, linewidths=4)
+#plt.show()
+plt.savefig(my_out_dir+'verif'+'.png')
+
+plt.contour(clim, linewidths=4)
+#plt.show()
+plt.savefig(my_out_dir+'clim'+'.png')
+
+#np.savetxt(my_fig_dir"foo.csv", a, delimiter=",")
+
+
+
+# %% save values to pandas df
+
+df = pd.DataFrame()
+
+df['ME_fcst']= ME_fcst
+
+data = {"ME_fcst": [ME_fcst],
+'ME_persist': [ME_persist],
+'MAE_fcst': [MAE_fcst],
+'MSE_fcst': [MSE_fcst],
+'MSE_clim': [MSE_clim],
+'MSESS_fcst': [MSESS_fcst],
+'RMSE_fcst': [RMSE_fcst],
+'PCC_fv': [PCC_fv],
+'AC': [AC],
+'AC_persist': [AC_persist]
+}
+
+df = pd.DataFrame(data) 
+
+df.to_csv(my_out_dir+"error_metrics.csv")
