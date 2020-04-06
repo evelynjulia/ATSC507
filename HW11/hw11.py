@@ -181,3 +181,87 @@ TSS = hit_rate - FA_rate # true skill score
 
 CSI = a / (a+b+c) # critical success index
 
+GSS = (a - a_random) / (a - a_random + b + c) # gilber skill score
+
+# %% add to df
+
+a20df = pd.DataFrame()
+
+
+a20data = {"a": [a],
+'b': [b],
+'c': [c],
+'d': [d],
+'n': [n],
+'E': [E],
+'a_random': [a_random],
+'bias': [bias],
+'portion_correct': [portion_correct],
+'HSS': [HSS],
+'hit_rate': [hit_rate],
+'FA_rate': [FA_rate],
+'FA_ratio': [FA_ratio],
+'TSS': [TSS],
+'CSI': [CSI],
+'GSS': [GSS]
+}
+
+a20df = pd.DataFrame(a20data) 
+
+a20df.to_csv(my_out_dir+"binary_verif_stats.csv")
+
+
+# %% A 21
+
+# a, b, c, and d are the same
+
+o = 0.5 # %
+
+cost = 5000  # protective cost
+loss = 50000
+
+
+e_clim = min(cost, o*loss)
+e_forcast = (a/n)*cost + (b/n)*cost + (c/n)*loss
+e_perfect = o*cost
+
+Value = (e_clim - e_forcast) / (e_clim - e_perfect)
+
+# or alternatively calculate like this:
+
+r_cl = cost / loss
+v = (min(r_cl, o) - (FA_rate * r_cl*(1-o)) + (hit_rate*(1-r_cl)*o) - o ) / (min(r_cl, o) - o*r_cl)
+
+
+a21df = pd.DataFrame()
+
+a21data = {"cost": [cost],
+'loss': [loss],
+'clim_freq': [o],
+'e_clim': [e_clim],
+'e_forcast': [e_forcast],
+'e_perfect': [e_perfect],
+'Value': [Value], 
+'r_cl': [r_cl], 
+'v_eq_20_55': [v]}
+
+a21df = pd.DataFrame(a21data) 
+a21df.to_csv(my_out_dir+"a21_v2.csv")
+
+
+# %% a 22
+
+k = np.arange(0,20,1)
+pk = np.append(np.arange(0.9, 0, -0.05), np.array([0.02, 0])) 
+ok = np.array([1,1,0,1,1,1,0,1,0,1,0,0,1,0,0,1,0,0,0,0])
+
+N = 20
+
+# %% A
+
+# Brier skill score:
+
+BSS = 1 - ( (sum((pk-ok)**2)) /  ( (sum(ok)) * (N - sum(ok))  ) ) 
+
+
+
