@@ -312,10 +312,38 @@ sml_tbl.to_csv(my_out_dir+"a22_sml_tbl.csv")
 # 1-1 line
 x = np.linspace(0,1,100)
 
-plt.plot(x, x, '--')
-plt.plot(bins, portion_verified)
-
+plt.plot(x, x, 'r--')
+plt.plot(bins, portion_verified, ".-")
 plt.xlabel("pj")
 plt.ylabel("noj / nj")
+plt.title("Reliability diagram")
 #plt.show()
 plt.savefig(my_out_dir+'a22_reliability'+'.png')
+
+
+# %% C find reliability brier skill score
+
+# pj (bin centre) = bins
+# nj = nj
+# noj = final_noj
+
+BSS_r = sum(((nj*bins)-final_noj)**2)  / (sum(ok)) * (N - sum(ok))
+
+results_a22_data = {"BSS": [BSS],
+'BSS_r': [BSS_r]}
+
+results_a22 = pd.DataFrame(results_a22_data) 
+results_a22.to_csv(my_out_dir+"a22_results.csv")
+
+# %% A 23 ROC diagram
+
+a23_hit_rate = [1.00,1.00,1.00,1.00,1.00,1.00,0.77,0.54,0.38,0.23,0.08]
+a23_false_alarm_rate = [0.71,0.71,0.53,0.35,0.18,0.00,0.00,0.00,0.00,0.00,0.00]
+
+plt.plot(x,x)
+plt.plot(a23_false_alarm_rate, a23_hit_rate, ".-")
+plt.xlabel("False alarm rate")
+plt.ylabel("Hit rate")
+plt.title("ROC diagram")
+#plt.show()
+plt.savefig(my_out_dir+'a23_ROC'+'.png')
