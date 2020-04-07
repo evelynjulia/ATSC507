@@ -263,16 +263,59 @@ N = 20
 
 BSS = 1 - ( (sum((pk-ok)**2)) /  ( (sum(ok)) * (N - sum(ok))  ) ) 
 
-# %% B
-
-# Reliabilty diagram
-
-dp = 0.2
+# %% B Reliabilty diagram
 
 # get bins:
-
-bins = np.arange(0, 1.2, 0.2)
+dp = 0.2
+bins = np.arange(0, 1.2, dp)
 
 # find which obs goes in which bin... 
-
 j = np.ceil((pk / dp))
+
+# and the number of obs in each bin (nj)
+unique_j, nj = np.unique(j, return_counts=True)
+
+# get the observed probabilities that happened:
+oj = j[ok==1]
+unique_oj, n_oj = np.unique(oj, return_counts=True)
+
+# in this case we need to include in the array that 0 observations fall in bin 0
+final_noj = np.append(0, n_oj)
+
+# n_oj / nj
+portion_verified = final_noj / nj
+
+
+# %% create dataframes
+
+
+big_tbl_data = {"k": k,
+'pk': pk,
+'ok': ok,
+'bin': j}
+
+big_tbl = pd.DataFrame(big_tbl_data) 
+big_tbl.to_csv(my_out_dir+"a22_big_tbl.csv")
+
+
+sml_tbl_data = {"j": unique_j,
+'pj': bins,
+'nj': nj,
+'noj': final_noj,
+'noj/nj': portion_verified}
+
+sml_tbl = pd.DataFrame(sml_tbl_data) 
+sml_tbl.to_csv(my_out_dir+"a22_sml_tbl.csv")
+
+# %% plot
+
+# 1-1 line
+x = np.linspace(0,1,100)
+
+plt.plot(x, x, '--')
+plt.plot(bins, portion_verified)
+
+plt.xlabel("pj")
+plt.ylabel("noj / nj")
+#plt.show()
+plt.savefig(my_out_dir+'a22_reliability'+'.png')
