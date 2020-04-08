@@ -337,8 +337,14 @@ results_a22.to_csv(my_out_dir+"a22_results.csv")
 
 # %% A 23 ROC diagram
 
-a23_hit_rate = [1.00,1.00,1.00,1.00,1.00,1.00,0.77,0.54,0.38,0.23,0.08]
-a23_false_alarm_rate = [0.71,0.71,0.53,0.35,0.18,0.00,0.00,0.00,0.00,0.00,0.00]
+# part c
+# a23_hit_rate = [1.00,1.00,1.00,1.00,1.00,1.00,0.77,0.54,0.38,0.23,0.08]
+# a23_false_alarm_rate = [0.71,0.71,0.53,0.35,0.18,0.00,0.00,0.00,0.00,0.00,0.00]
+
+# part a
+a23_hit_rate = [1.00,1.00,1.00,0.86,0.85,0.85,0.77,0.69,0.62,0.38,0.15]
+a23_false_alarm_rate = [1.00,0.71,0.41,0.25,0.24,0.18,0.12,0.06,0.00,0.00,0.00]
+
 
 plt.plot(x,x)
 plt.plot(a23_false_alarm_rate, a23_hit_rate, ".-")
@@ -346,4 +352,44 @@ plt.xlabel("False alarm rate")
 plt.ylabel("Hit rate")
 plt.title("ROC diagram")
 #plt.show()
-plt.savefig(my_out_dir+'a23_ROC'+'.png')
+plt.savefig(my_out_dir+'a23_ROC_a'+'.png')
+
+
+# %% area under curve:
+
+import numpy as np
+from scipy.integrate import simps
+from numpy import trapz
+
+
+# The y values.  A numpy array is used here,
+# but a python list could also be used.
+y = a23_hit_rate
+
+# Compute the area using the composite trapezoidal rule.
+area = trapz(np.flip(a23_hit_rate), x = np.flip(a23_false_alarm_rate))
+print("area =", area)
+
+# Compute the area using the composite Simpson's rule.
+area = simps(a23_hit_rate, x=np.flip(a23_false_alarm_rate))
+print("area =", area)
+
+
+# from sklearn import metrics
+# y = np.array([1, 1, 2, 2])
+# pred = np.array([0.1, 0.4, 0.35, 0.8])
+# fpr, tpr, thresholds = metrics.roc_curve(a23_hit_rate, a23_false_alarm_rate, pos_label=2)
+# metrics.auc(fpr, tpr)
+
+# obs_y = [1,0,1,1,0,0,0,1,0,1,1,0,0,0,1,0,1,1,1,0,0,0,0,0,1,0,0,1,0,1]
+
+# probs = [50,20,20,60,50,20,30,90,40,30,100,10,0,10,80,60,70,90,80,70,10,10,0,0,80,0,0,100,10,90]
+# calculate roc curve
+# fpr, tpr, thresholds = metrics.roc_curve(obs_y, probs) # false alarms, # hit rate
+
+# plt.plot(fpr, tpr)
+# plt.show()
+
+# calculate AUC
+# auc = metrics.roc_auc_score(obs_y, probs)
+# print('AUC: %.3f' % auc)
