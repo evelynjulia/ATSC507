@@ -158,8 +158,20 @@ for n in part_an:
     # append answer to array
     part_a[n-1] = Pmn
 
-plt.plot(u, part_a.T)
-plt.show()
+# y0 = np.zeros(x.shape)
+labels = ['n=1', 'n=2', 'n=3', 'n=4']
+
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
+lines = ax.plot(u, part_a.T)
+ax.legend(lines, labels)
+ax.plot(u,y0, 'k')
+ax.set_xlabel("u")
+ax.set_ylabel("P(u)")
+plt.title('m = 0')
+#plt.show()
+plt.savefig(out_dir+'q3a'+'.png')
+
+
 
 
 t1 = np.sqrt((2*n +1)*(math.factorial(n-m)/math.factorial(n+m)))
