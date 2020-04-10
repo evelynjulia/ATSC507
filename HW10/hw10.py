@@ -137,7 +137,31 @@ def get_deriv(m,n,u):
             ddu = 120*u**3 -72*u
         elif n ==4:
             ddu = 1680*u**4 - 1440*u**2 + 144
+
+    elif m == 1:
+        if n == 1:
+            ddu = 2
+        elif n== 2:
+            ddu = 24*u
+        elif n==3:
+            ddu = 360*u**2 - 72
+        elif n ==4:
+            ddu = 6720*u**3 - 2880*u
+        elif n == 5:
+            ddu = 30240*u**5 - 33600*u**3 + 7200*u
     
+    elif m == 2:
+        if n== 2:
+            ddu = 24
+        elif n==3:
+            ddu = 720*u
+        elif n ==4:
+            ddu = 20160*u**2 -2880
+        elif n == 5:
+            ddu = 151200*u**4 - 100800*u**2 + 7200
+        elif n == 6:
+            ddu = 19958400*u**4 - 10886400*u**2 + 604800
+
     return ddu
 
 
@@ -174,9 +198,61 @@ plt.savefig(out_dir+'q3a'+'.png')
 
 
 
-t1 = np.sqrt((2*n +1)*(math.factorial(n-m)/math.factorial(n+m)))
-t2 = ((1-u**2)**(m/2) ) / ((2**n) * math.factorial(n))
-t3 = get_deriv(m,n,u)
+
+# m = 1
+m = 1
+part_bn = np.array([1,2,3,4,5])
+part_b = np.empty((len(part_bn), len(u)))
 
 
-Pmn =  t1 * t2 * t3 
+for n in part_bn:
+    # calculate the function
+    t1 = np.sqrt((2*n +1)*(math.factorial(n-m)/math.factorial(n+m)))
+    t2 = ((1-u**2)**(m/2) ) / ((2**n) * math.factorial(n))
+    t3 = get_deriv(m,n,u)
+    Pmn =  t1 * t2 * t3 
+    # append answer to array
+    part_b[n-1] = Pmn
+
+# y0 = np.zeros(x.shape)
+labels_b = ['n=1', 'n=2', 'n=3', 'n=4', 'n=5']
+
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
+lines_b = ax.plot(u, part_b.T)
+ax.legend(lines_b, labels_b)
+ax.plot(u,y0, 'k')
+ax.set_xlabel("u")
+ax.set_ylabel("P(u)")
+plt.title('m = 1')
+#plt.show()
+plt.savefig(out_dir+'q3b'+'.png')
+
+
+# m = 2
+m = 2
+part_cn = np.array([2,3,4,5,6])
+part_c = np.empty((len(part_cn), len(u)))
+
+
+for n in part_cn:
+    # calculate the function
+    t1 = np.sqrt((2*n +1)*(math.factorial(n-m)/math.factorial(n+m)))
+    t2 = ((1-u**2)**(m/2) ) / ((2**n) * math.factorial(n))
+    t3 = get_deriv(m,n,u)
+    Pmn =  t1 * t2 * t3 
+    # append answer to array
+    part_c[n-2] = Pmn
+
+# y0 = np.zeros(x.shape)
+labels_c = ['n=2', 'n=3', 'n=4', 'n=5', 'n=6']
+
+fig, ax = plt.subplots(1,1, figsize=myfigsize)
+lines_c = ax.plot(u, part_c.T)
+ax.legend(lines_c, labels_c)
+ax.plot(u,y0, 'k')
+ax.set_xlabel("u")
+ax.set_ylabel("P(u)")
+plt.title('m = 2')
+#plt.show()
+plt.savefig(out_dir+'q3c'+'.png')
+
