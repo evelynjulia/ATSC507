@@ -61,7 +61,7 @@ ax.plot_wireframe(xv, top, yv, color = 'g')
 ax.plot_wireframe(xv, bottom, yv, color = 'g')
 #ax.view_init(60, 35)
 #plt.show()
-plt.savefig(fig_dir+'step1_box'+'_'+run_date+'.png')
+plt.savefig(my_fig_dir+'step1_box'+'_'+run_date+'.png')
 
 # %% Equidistant gnomonic plot
 
@@ -112,7 +112,7 @@ ax.plot_wireframe(bigx_bottom, bigZ_bottom, bigy_bottom, color = 'g')
 plt.title('equidistant gnomonic projection')
 #ax.view_init(60, 35)
 #plt.show()
-#plt.savefig(fig_dir+'equidistant_gnomonic'+'_'+run_date+'.png')
+#plt.savefig(my_fig_dir+'equidistant_gnomonic'+'_'+run_date+'.png')
 
 #x, y, z = ( (r) / np.sqrt( a**2 +  xlocal**2 +ylocal**2) )* (a, xlocal, ylocal)
 
@@ -149,7 +149,7 @@ ax.plot_wireframe(bigx_top, bigZ_top, bigy_top, color = 'g')
 ax.plot_wireframe(bigx_bottom, bigZ_bottom, bigy_bottom, color = 'g')
 plt.title('equiangular gnomonic projection')
 #plt.show()
-plt.savefig(fig_dir+'equiangular_gnomonic'+'_'+run_date+'.png')
+plt.savefig(my_fig_dir+'equiangular_gnomonic'+'_'+run_date+'.png')
 
 # plt.plot(x, np.ones(12))
 # plt.plot(xlocal_angle, np.zeros(12))
