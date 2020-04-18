@@ -32,6 +32,7 @@ gnomonic(radius=2, c=12, fig_dir=my_fig_dir, type='equiangular')
 # %% Question 1
 
 x = np.arange(-0.9, 1, 0.1)
+x = np.arange(-1, 1.01, 0.1)
 
 rho = 1
 k = int(len(x) / 3)  # the number of points in each region
