@@ -52,5 +52,5 @@ def gnomonic(radius, c, fig_dir, type='equidistant'):
     ax.plot_wireframe(bigZ_bottom, bigx_bottom, bigy_bottom, color = 'r')
     ax.plot_wireframe(bigx_top, bigZ_top, bigy_top, color = 'g')
     ax.plot_wireframe(bigx_bottom, bigZ_bottom, bigy_bottom, color = 'g')
-    plt.title(type+' gnomonic projection')
-    plt.savefig(fig_dir+c+'c'+type+'_gnomonic'+'_'+run_date+'.png')
+    plt.title(str(c)+'c '+type+' gnomonic projection')
+    plt.savefig(fig_dir+str(c)+'c_'+type+'_gnomonic'+'_'+run_date+'.png')
