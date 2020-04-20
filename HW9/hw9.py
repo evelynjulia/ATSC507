@@ -45,9 +45,9 @@ x = np.arange(-0.9, 1, 0.1)
 
 rho = 1
 k = int(len(x) / 3)  # the number of points in each region
-v1 = x[0:k+1]
+v1 = x[0:k]
 v2 = x[k:2*k+1]
-v3 = x[2*k:3*k+1]
+v3 = x[2*k+1:3*k+1]
 
 gen_p1 = round(sum(v1 * rho) / (1*k), 3)
 gen_p2 = round(sum(v2 * rho) / (1*k), 3)
