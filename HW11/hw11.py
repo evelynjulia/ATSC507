@@ -340,12 +340,14 @@ plt.savefig(my_out_dir+'a22_reliability'+'.png')
 # noj = final_noj
 
 
-newnj = [4,4,4,4,4,0]
-newfinalnoj= [0.75,0.75,0.25,0.5,0,0]
+# final_noj
+# nj
 
-BSS_r = sum(((newnj*bins)-newfinalnoj)**2)  / (sum(ok)) * (N - sum(ok))
 
-BSS_r = sum(((nj*bins)-final_noj)**2)  / (sum(ok)) * (N - sum(ok))
+
+BSS_r = sum(((nj*pj)-final_noj)**2)  / ((sum(ok)) * (N - sum(ok)))
+
+
 
 results_a22_data = {"BSS": [BSS],
 'BSS_r': [BSS_r]}
