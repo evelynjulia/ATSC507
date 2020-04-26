@@ -270,29 +270,18 @@ dp = 0.2
 pj = np.arange(0, 1.2, dp) # bin centres
 
 # find which obs goes in which bin... 
-#j = np.ceil((pk / dp))
-
-j = np.round(pk/dp, 0) # the bins that each probability pk value is in
-
+# the bins that each probability pk value is in
 j = np.array([5,4,4,4,4,3,3,3,3,2,2,2,2,1,1,1,1,0,0,0])
 
 # and the number of obs in each bin (nj)
 unique_j, nj = np.unique(j, return_counts=True)
 
-#bin_nums = np.append(unique_j,5)
-#final_nj = np.append(nj,0)
-
 # get the observed probabilities that happened:
 oj = j[ok==1]
 unique_oj, n_oj = np.unique(oj, return_counts=True)
 
-
-
-#oj0 = j[ok==0]
-
 # in this case we need to include in the array that 0 observations fall in bin 0
 final_noj = np.append(0, n_oj)
-#final_noj = np.append(final_noj1,0)
 
 # n_oj / nj
 portion_verified = final_noj / nj
@@ -335,14 +324,9 @@ plt.savefig(my_out_dir+'a22_reliability'+'.png')
 
 # %% C find reliability brier skill score
 
-# pj (bin centre) = bins
+# pj (bin centre) 
 # nj = nj
 # noj = final_noj
-
-
-# final_noj
-# nj
-
 
 
 BSS_r = sum(((nj*pj)-final_noj)**2)  / ((sum(ok)) * (N - sum(ok)))
